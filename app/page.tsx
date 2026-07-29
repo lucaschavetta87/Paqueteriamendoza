@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
 import WhatsAppChat from '../components/WhatsAppChat';
-import { FaCheckCircle } from 'react-icons/fa';
+import { CheckCircle } from 'lucide-react';
 
 // Componentes modulares adaptados a AndesBox
 import Navbar from '../components/Navbar';
@@ -184,7 +184,7 @@ export default function WebAndesBox() {
       {/* NOTIFICACIÓN FLOTANTE */}
       {notificacion && (
         <div style={{ position: 'fixed', top: '95px', right: '25px', backgroundColor: 'rgba(15, 23, 42, 0.85)', backdropFilter: 'blur(15px)', border: `1px solid ${azulModerno}`, borderRadius: '16px', padding: '12px 24px', color: '#fff', display: 'flex', alignItems: 'center', gap: '12px', zIndex: 5000, boxShadow: `0 10px 25px rgba(59, 130, 246, 0.25)`, fontWeight: '600', fontSize: '0.9rem' }}>
-          <FaCheckCircle color="#10b981" size={18} /> {notificacion}
+          <CheckCircle color="#10b981" size={18} /> {notificacion}
         </div>
       )}
     </div>

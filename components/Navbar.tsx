@@ -1,13 +1,13 @@
 "use client";
 import React, { useState } from 'react';
 import { 
-  FaBars, 
-  FaTimes, 
-  FaPhoneAlt, 
-  FaMapMarkerAlt, 
-  FaGlobeAmericas, 
-  FaWhatsapp 
-} from 'react-icons/fa';
+  Menu, 
+  X, 
+  Phone, 
+  MapPin, 
+  Globe, 
+  MessageSquare 
+} from 'lucide-react';
 
 interface NavbarProps {
   setVista: (vista: 'inicio' | 'calculadora') => void;
@@ -146,7 +146,7 @@ export default function Navbar({ setVista, azulModerno }: NavbarProps) {
           onClick={toggleMenu}
           aria-label="Menú principal"
         >
-          {menuAbierto ? <FaTimes size={20} /> : <FaBars size={20} />}
+          {menuAbierto ? <X size={20} /> : <Menu size={20} />}
         </button>
       </nav>
 
@@ -168,14 +168,14 @@ export default function Navbar({ setVista, azulModerno }: NavbarProps) {
               onClick={toggleMenu} 
               style={{ background: 'none', border: 'none', color: '#fff', cursor: 'pointer', opacity: 0.7 }}
             >
-              <FaTimes size={18} />
+              <X size={18} />
             </button>
           </div>
 
           {/* SOBRE NOSOTROS (DIFUMINADO/DEGRADADO) */}
           <div style={{ marginBottom: '35px' }}>
             <h3 style={{ fontSize: '1.05rem', fontWeight: '900', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <FaGlobeAmericas size={16} color={azulModerno} /> 
+              <Globe size={16} color={azulModerno} /> 
               <span className="logo-text">Sobre Nosotros</span>
             </h3>
             <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.75)', lineHeight: '1.6', margin: 0 }}>
@@ -186,7 +186,7 @@ export default function Navbar({ setVista, azulModerno }: NavbarProps) {
           {/* CONTACTANOS (DIFUMINADO/DEGRADADO) */}
           <div>
             <h3 style={{ fontSize: '1.05rem', fontWeight: '900', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <FaPhoneAlt size={15} color={azulModerno} /> 
+              <Phone size={15} color={azulModerno} /> 
               <span className="logo-text">Contactanos</span>
             </h3>
             
@@ -200,7 +200,7 @@ export default function Navbar({ setVista, azulModerno }: NavbarProps) {
                 style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: '#fff', backgroundColor: 'rgba(255,255,255,0.05)', padding: '12px 15px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.08)', transition: 'all 0.3s' }}
               >
                 <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#10b98125', color: '#10b981', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <FaWhatsapp size={18} />
+                  <MessageSquare size={18} />
                 </div>
                 <div>
                   <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', display: 'block' }}>Atención al Cliente</span>
@@ -211,7 +211,7 @@ export default function Navbar({ setVista, azulModerno }: NavbarProps) {
               {/* UBICACIÓN REAL */}
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', backgroundColor: 'rgba(255,255,255,0.05)', padding: '12px 15px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.08)' }}>
                 <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: `${azulModerno}25`, color: azulModerno, display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
-                  <FaMapMarkerAlt size={16} />
+                  <MapPin size={16} />
                 </div>
                 <div>
                   <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', display: 'block' }}>Oficina Central</span>

@@ -2,16 +2,16 @@
 import React, { useState } from 'react';
 import ServiceItem from './ServiceItem';
 import { 
-  FaChevronDown, 
-  FaChevronUp, 
-  FaPlane, 
-  FaShip,
-  FaFileAlt,
-  FaBox,
-  FaBatteryFull,
-  FaSearch,
-  FaExternalLinkAlt
-} from 'react-icons/fa';
+  ChevronDown, 
+  ChevronUp, 
+  Plane, 
+  Ship, 
+  FileText, 
+  Package, 
+  BatteryCharging, 
+  Search, 
+  ExternalLink 
+} from 'lucide-react';
 
 interface PaqueteData {
   tracking_id: string;
@@ -261,9 +261,9 @@ export default function TrackingView({
               {cargando ? (
                 'LOCALIZANDO...'
               ) : carrierActual?.url ? (
-                <>CONSULTAR EN PORTAL OFICIAL {carrierActual.nombre.toUpperCase()} <FaExternalLinkAlt size={14} /></>
+                <>CONSULTAR EN PORTAL OFICIAL {carrierActual.nombre.toUpperCase()} <ExternalLink size={16} /></>
               ) : (
-                <><FaSearch /> RASTREAR EN ANDESBOX</>
+                <><Search size={18} /> RASTREAR EN ANDESBOX</>
               )}
             </button>
           </div>
@@ -340,14 +340,14 @@ export default function TrackingView({
                   style={estiloBotonSeleccion(transporte === 'aereo')}
                   onClick={() => setTransporte('aereo')}
                 >
-                  <FaPlane size={16} /> Aéreo Express
+                  <Plane size={16} /> Aéreo Express
                 </button>
                 <button
                   type="button"
                   style={estiloBotonSeleccion(transporte === 'maritimo')}
                   onClick={() => setTransporte('maritimo')}
                 >
-                  <FaShip size={16} /> Carga Marítima
+                  <Ship size={16} /> Carga Marítima
                 </button>
               </div>
 
@@ -378,14 +378,14 @@ export default function TrackingView({
                   style={estiloBotonSeleccion(tipoCarga === 'documento')}
                   onClick={() => setTipoCarga('documento')}
                 >
-                  <FaFileAlt size={16} /> Documentación / Sobre
+                  <FileText size={16} /> Documentación / Sobre
                 </button>
                 <button
                   type="button"
                   style={estiloBotonSeleccion(tipoCarga === 'paquete')}
                   onClick={() => setTipoCarga('paquete')}
                 >
-                  <FaBox size={16} /> Paquete / Mercadería
+                  <Package size={16} /> Paquete / Mercadería
                 </button>
               </div>
 
@@ -422,7 +422,7 @@ export default function TrackingView({
                         style={estiloBotonSeleccion(contieneBaterias === 'si')}
                         onClick={() => setContieneBaterias('si')}
                       >
-                        <FaBatteryFull color="#f59e0b" size={14} /> Sí, contiene batería
+                        <BatteryCharging color="#f59e0b" size={16} /> Sí, contiene batería
                       </button>
                     </div>
                   </div>
@@ -511,7 +511,7 @@ export default function TrackingView({
                     style={{ width: '100%', backgroundColor: 'transparent', border: 'none', padding: '18px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', textAlign: 'left', color: '#fff', fontSize: '0.95rem', fontWeight: '700' }}
                   >
                     <span>{faq.q}</span>
-                    {isOpen ? <FaChevronUp color={azulModerno} /> : <FaChevronDown opacity={0.5} />}
+                    {isOpen ? <ChevronUp color={azulModerno} size={18} /> : <ChevronDown opacity={0.5} size={18} />}
                   </button>
                   {isOpen && (
                     <div style={{ padding: '0 20px 20px 20px', color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', lineHeight: '1.5', animation: 'fadeIn 0.2s ease-out' }}>
