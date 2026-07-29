@@ -497,6 +497,64 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
     const [transporte, setTransporte] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('aereo');
     const [tipoCarga, setTipoCarga] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('paquete');
     const [contieneBaterias, setContieneBaterias] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('no');
+    // --- DETECCIÓN AUTOMÁTICA DE COURIER Y GENERACIÓN DE DEEP-LINK OFICIAL ---
+    const obtenerCarrierYLink = (tracking)=>{
+        const clean = tracking.trim().toUpperCase();
+        if (!clean) return null;
+        // Formato UPS: Empieza con 1Z
+        if (/^1Z[A-Z0-9]{16}$/i.test(clean)) {
+            return {
+                nombre: 'UPS Express',
+                color: '#ffb300',
+                tag: '🤎 UPS Express',
+                url: `https://www.ups.com/track?tracknum=${clean}`
+            };
+        }
+        // Formato DHL: 10 dígitos o prefijo JJD/JD
+        if (/^\d{10}$/.test(clean) || /^JJD\d+$/i.test(clean)) {
+            return {
+                nombre: 'DHL Express',
+                color: '#ef4444',
+                tag: '🟡 DHL Express',
+                url: `https://www.dhl.com/ar-es/home/tracking.html?tracking-id=${clean}`
+            };
+        }
+        // Formato FedEx: 12, 15 o 20 dígitos
+        if (/^(\d{12}|\d{15}|\d{20})$/.test(clean)) {
+            return {
+                nombre: 'FedEx Express',
+                color: '#a855f7',
+                tag: '🟣 FedEx Express',
+                url: `https://www.fedex.com/fedextrack/?trknbr=${clean}`
+            };
+        }
+        // Formato USPS: 22 dígitos o termina en US
+        if (/^(94|92|93|91)\d{20}$/.test(clean) || /^[A-Z]{2}\d{9}US$/i.test(clean)) {
+            return {
+                nombre: 'USPS (Correo USA)',
+                color: '#3b82f6',
+                tag: '🔵 USPS',
+                url: `https://tools.usps.com/go/TrackConfirmAction?tLabels=${clean}`
+            };
+        }
+        return {
+            nombre: 'AndesBox Tracking',
+            color: azulModerno,
+            tag: '📦 AndesBox',
+            url: null
+        };
+    };
+    // MANEJADOR INTELIGENTE DE BÚSQUEDA
+    const handleRastrearAccion = ()=>{
+        const carrierInfo = obtenerCarrierYLink(trackingBusqueda);
+        // Si se detecta un courier internacional con enlace oficial, lo abre en nueva pestaña
+        if (carrierInfo && carrierInfo.url) {
+            window.open(carrierInfo.url, '_blank');
+        } else {
+            // Si es un código propio de AndesBox (o formato general), consulta la BD
+            buscarTracking();
+        }
+    };
     const toggleFaq = (index)=>{
         setFaqAbierta(faqAbierta === index ? null : index);
     };
@@ -552,6 +610,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
         letterSpacing: '0.5px',
         textTransform: 'uppercase'
     };
+    const carrierActual = obtenerCarrierYLink(trackingBusqueda);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -582,7 +641,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 children: "Cruzamos fronteras"
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 107,
+                                lineNumber: 170,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -596,13 +655,13 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 children: "Por vos"
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 110,
+                                lineNumber: 173,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/TrackingVIew.tsx",
-                        lineNumber: 106,
+                        lineNumber: 169,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -616,7 +675,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                         children: "Traé tecnología, ropa, repuestos y documentacion de cualquier parte del mundo de forma rápida, segura y al mejor costo."
                     }, void 0, false, {
                         fileName: "[project]/components/TrackingVIew.tsx",
-                        lineNumber: 121,
+                        lineNumber: 184,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -633,7 +692,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                         children: "BENEFICIOS ANDESBOX"
                     }, void 0, false, {
                         fileName: "[project]/components/TrackingVIew.tsx",
-                        lineNumber: 125,
+                        lineNumber: 188,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -651,7 +710,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 desc: "Contanos tu proyecto y te damos el mejor asesoramiento."
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 130,
+                                lineNumber: 193,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ServiceItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -660,7 +719,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 desc: "Salidas constantes para garantizar que tus paquetes lleguen en tiempo récord."
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 131,
+                                lineNumber: 194,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ServiceItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -669,7 +728,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 desc: "Nos encargamos de todos los trámites de importación. Te olvidás de tramites aduaneros."
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 132,
+                                lineNumber: 195,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ServiceItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -678,7 +737,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 desc: "Monitoreo constante de tu carga desde que llega a Miami hasta que entra a Mendoza."
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 133,
+                                lineNumber: 196,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ServiceItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -687,7 +746,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 desc: "Pagás exactamente por lo que pesa tu paquete. Sin sorpresas ni cargos ocultos."
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 134,
+                                lineNumber: 197,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ServiceItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -696,19 +755,19 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 desc: "Retirá en nuestra sucursal de Mendoza o coordinamos el envío a cualquier punto del país."
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 135,
+                                lineNumber: 198,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/TrackingVIew.tsx",
-                        lineNumber: 129,
+                        lineNumber: 192,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/TrackingVIew.tsx",
-                lineNumber: 105,
+                lineNumber: 168,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -744,82 +803,136 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 children: "Rastreá tu Envío"
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 144,
+                                lineNumber: 207,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 style: {
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                                    display: 'flex',
+                                    flexDirection: 'column',
                                     gap: '15px',
                                     marginBottom: '15px'
                                 },
                                 children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                        type: "text",
-                                        placeholder: "Nro de Tracking (Ej: AB-8492)",
-                                        value: trackingBusqueda,
-                                        onChange: (e)=>setTrackingBusqueda(e.target.value),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         style: {
-                                            padding: '15px',
-                                            borderRadius: '15px',
-                                            border: 'none',
-                                            backgroundColor: 'rgba(255,255,255,0.1)',
-                                            color: '#fff',
-                                            outline: 'none',
-                                            width: '100%',
-                                            boxSizing: 'border-box'
-                                        }
-                                    }, void 0, false, {
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: '8px'
+                                        },
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                type: "text",
+                                                placeholder: "Nro de Tracking (Ej: 1Z..., AB-8492)",
+                                                value: trackingBusqueda,
+                                                onChange: (e)=>setTrackingBusqueda(e.target.value),
+                                                onKeyDown: (e)=>e.key === 'Enter' && handleRastrearAccion(),
+                                                style: {
+                                                    padding: '18px 20px',
+                                                    borderRadius: '16px',
+                                                    border: '1px solid rgba(255,255,255,0.15)',
+                                                    backgroundColor: 'rgba(255,255,255,0.08)',
+                                                    color: '#fff',
+                                                    outline: 'none',
+                                                    width: '100%',
+                                                    boxSizing: 'border-box',
+                                                    fontSize: '1rem',
+                                                    fontWeight: '600'
+                                                }
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                lineNumber: 212,
+                                                columnNumber: 15
+                                            }, this),
+                                            trackingBusqueda.trim().length > 3 && carrierActual && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    fontSize: '0.78rem',
+                                                    fontWeight: 'bold',
+                                                    color: '#fff',
+                                                    backgroundColor: 'rgba(0,0,0,0.5)',
+                                                    padding: '6px 12px',
+                                                    borderRadius: '10px',
+                                                    display: 'inline-flex',
+                                                    alignItems: 'center',
+                                                    gap: '6px',
+                                                    alignSelf: 'flex-start',
+                                                    border: `1px solid ${carrierActual.color}`,
+                                                    animation: 'fadeIn 0.2s ease-out'
+                                                },
+                                                children: [
+                                                    "Empresa detectada: ",
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        style: {
+                                                            color: carrierActual.color
+                                                        },
+                                                        children: carrierActual.tag
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                        lineNumber: 237,
+                                                        columnNumber: 38
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                lineNumber: 223,
+                                                columnNumber: 17
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 146,
+                                        lineNumber: 211,
                                         columnNumber: 13
                                     }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                        type: "text",
-                                        inputMode: "tel",
-                                        placeholder: "Teléfono Registrado",
-                                        value: telBusqueda,
-                                        onChange: (e)=>setTelBusqueda(e.target.value),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: handleRastrearAccion,
                                         style: {
-                                            padding: '15px',
-                                            borderRadius: '15px',
-                                            border: 'none',
-                                            backgroundColor: 'rgba(255,255,255,0.1)',
-                                            color: '#fff',
-                                            outline: 'none',
                                             width: '100%',
-                                            boxSizing: 'border-box'
-                                        }
+                                            backgroundColor: carrierActual?.url ? carrierActual.color : azulModerno,
+                                            color: '#fff',
+                                            padding: '18px',
+                                            borderRadius: '16px',
+                                            fontWeight: '900',
+                                            cursor: 'pointer',
+                                            border: 'none',
+                                            fontSize: '1rem',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            gap: '10px',
+                                            transition: 'all 0.3s'
+                                        },
+                                        children: cargando ? 'LOCALIZANDO...' : carrierActual?.url ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                                            children: [
+                                                "CONSULTAR EN PORTAL OFICIAL ",
+                                                carrierActual.nombre.toUpperCase(),
+                                                " ",
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaExternalLinkAlt"], {
+                                                    size: 14
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/TrackingVIew.tsx",
+                                                    lineNumber: 264,
+                                                    columnNumber: 84
+                                                }, this)
+                                            ]
+                                        }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaSearch"], {}, void 0, false, {
+                                                    fileName: "[project]/components/TrackingVIew.tsx",
+                                                    lineNumber: 266,
+                                                    columnNumber: 19
+                                                }, this),
+                                                " RASTREAR EN ANDESBOX"
+                                            ]
+                                        }, void 0, true)
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 147,
+                                        lineNumber: 242,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 145,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                onClick: buscarTracking,
-                                style: {
-                                    width: '100%',
-                                    backgroundColor: azulModerno,
-                                    color: '#fff',
-                                    padding: '18px',
-                                    borderRadius: '15px',
-                                    fontWeight: '900',
-                                    cursor: 'pointer',
-                                    border: 'none',
-                                    fontSize: '1rem',
-                                    transition: 'all 0.3s'
-                                },
-                                children: cargando ? 'LOCALIZANDO...' : 'BUSCAR PAQUETE'
-                            }, void 0, false, {
-                                fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 149,
+                                lineNumber: 209,
                                 columnNumber: 11
                             }, this),
                             errorBusqueda && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -827,12 +940,13 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                     color: '#ff4b4b',
                                     textAlign: 'center',
                                     marginTop: '15px',
-                                    fontSize: '0.9rem'
+                                    fontSize: '0.9rem',
+                                    fontWeight: '600'
                                 },
                                 children: errorBusqueda
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 151,
+                                lineNumber: 271,
                                 columnNumber: 29
                             }, this),
                             paquete && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -860,12 +974,12 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                             children: paquete.estado_envio.toUpperCase()
                                         }, void 0, false, {
                                             fileName: "[project]/components/TrackingVIew.tsx",
-                                            lineNumber: 156,
+                                            lineNumber: 276,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 155,
+                                        lineNumber: 275,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -878,7 +992,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                         children: paquete.descripcion
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 158,
+                                        lineNumber: 278,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -900,7 +1014,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 160,
+                                                lineNumber: 280,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -910,25 +1024,25 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 161,
+                                                lineNumber: 281,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 159,
+                                        lineNumber: 279,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 154,
+                                lineNumber: 274,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/TrackingVIew.tsx",
-                        lineNumber: 143,
+                        lineNumber: 206,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -959,13 +1073,13 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                         children: "Envío"
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 179,
+                                        lineNumber: 299,
                                         columnNumber: 23
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 178,
+                                lineNumber: 298,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -978,7 +1092,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 children: "Configurá los datos de tu carga para recibir un presupuesto exacto."
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 181,
+                                lineNumber: 301,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -996,7 +1110,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                         value: tipoOperacion
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 188,
+                                        lineNumber: 308,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1005,7 +1119,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                         value: transporte
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 189,
+                                        lineNumber: 309,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1014,7 +1128,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                         value: tipoCarga
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 190,
+                                        lineNumber: 310,
                                         columnNumber: 13
                                     }, this),
                                     tipoCarga === 'paquete' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1023,7 +1137,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                         value: contieneBaterias
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 191,
+                                        lineNumber: 311,
                                         columnNumber: 41
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1033,7 +1147,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                 children: "1. Sentido de la Operación"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 195,
+                                                lineNumber: 315,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1049,7 +1163,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                         children: "📥 Importación (Traer a ARG)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 197,
+                                                        lineNumber: 317,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1059,19 +1173,19 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                         children: "📤 Exportación (Enviar al exterior)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 204,
+                                                        lineNumber: 324,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 196,
+                                                lineNumber: 316,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 194,
+                                        lineNumber: 314,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1081,7 +1195,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                 children: "2. Vía de Transporte y Ubicación"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 216,
+                                                lineNumber: 336,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1101,14 +1215,14 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 size: 16
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 223,
+                                                                lineNumber: 343,
                                                                 columnNumber: 19
                                                             }, this),
                                                             " Aéreo Express"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 218,
+                                                        lineNumber: 338,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1120,20 +1234,20 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 size: 16
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 230,
+                                                                lineNumber: 350,
                                                                 columnNumber: 19
                                                             }, this),
                                                             " Carga Marítima"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 225,
+                                                        lineNumber: 345,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 217,
+                                                lineNumber: 337,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1151,7 +1265,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                         style: estiloInput
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 235,
+                                                        lineNumber: 355,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1162,19 +1276,19 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                         style: estiloInput
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 242,
+                                                        lineNumber: 362,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 234,
+                                                lineNumber: 354,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 215,
+                                        lineNumber: 335,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1184,7 +1298,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                 children: "3. ¿Qué vas a enviar?"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 254,
+                                                lineNumber: 374,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1203,14 +1317,14 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 size: 16
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 261,
+                                                                lineNumber: 381,
                                                                 columnNumber: 19
                                                             }, this),
                                                             " Documentación / Sobre"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 256,
+                                                        lineNumber: 376,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1222,20 +1336,20 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 size: 16
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 268,
+                                                                lineNumber: 388,
                                                                 columnNumber: 19
                                                             }, this),
                                                             " Paquete / Mercadería"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 263,
+                                                        lineNumber: 383,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 255,
+                                                lineNumber: 375,
                                                 columnNumber: 15
                                             }, this),
                                             tipoCarga === 'documento' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1247,12 +1361,12 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                     style: estiloInput
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/TrackingVIew.tsx",
-                                                    lineNumber: 275,
+                                                    lineNumber: 395,
                                                     columnNumber: 19
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 274,
+                                                lineNumber: 394,
                                                 columnNumber: 17
                                             }, this) : /* CAMPOS CONDICIONALES PARA PAQUETES Y MERCADERÍA */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 style: {
@@ -1273,7 +1387,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 children: "⚡ ¿El paquete contiene baterías de Litio o equipos electrónicos con batería integrada?"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 289,
+                                                                lineNumber: 409,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1289,7 +1403,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                         children: "No contiene baterías"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                                        lineNumber: 293,
+                                                                        lineNumber: 413,
                                                                         columnNumber: 23
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1302,26 +1416,26 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                                 size: 14
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                                lineNumber: 305,
+                                                                                lineNumber: 425,
                                                                                 columnNumber: 25
                                                                             }, this),
                                                                             " Sí, contiene batería"
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                                        lineNumber: 300,
+                                                                        lineNumber: 420,
                                                                         columnNumber: 23
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 292,
+                                                                lineNumber: 412,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 288,
+                                                        lineNumber: 408,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -1342,7 +1456,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 children: "Tipo de mercadería (Seleccioná una categoría)"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 317,
+                                                                lineNumber: 437,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1353,7 +1467,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 children: "💻 Electrónica / Celulares / Componentes"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 318,
+                                                                lineNumber: 438,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1364,7 +1478,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 children: "👟 Ropa / Zapatillas / Calzado"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 319,
+                                                                lineNumber: 439,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1375,7 +1489,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 children: "⚙️ Repuestos automotores o industriales"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 320,
+                                                                lineNumber: 440,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1386,7 +1500,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 children: "🧴 Cosmética / Suplementos permitidos"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 321,
+                                                                lineNumber: 441,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -1397,13 +1511,13 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 children: "📦 Carga General / Otros"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 322,
+                                                                lineNumber: 442,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 311,
+                                                        lineNumber: 431,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1422,7 +1536,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 style: estiloInput
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 327,
+                                                                lineNumber: 447,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1433,7 +1547,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 style: estiloInput
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 328,
+                                                                lineNumber: 448,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1444,7 +1558,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 style: estiloInput
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 329,
+                                                                lineNumber: 449,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1455,25 +1569,25 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                                 style: estiloInput
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                                lineNumber: 330,
+                                                                lineNumber: 450,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 326,
+                                                        lineNumber: 446,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 285,
+                                                lineNumber: 405,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 253,
+                                        lineNumber: 373,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1483,7 +1597,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                 children: "4. Datos de Contacto"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 338,
+                                                lineNumber: 458,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1501,7 +1615,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                         style: estiloInput
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 340,
+                                                        lineNumber: 460,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1513,19 +1627,19 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                         style: estiloInput
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 341,
+                                                        lineNumber: 461,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 339,
+                                                lineNumber: 459,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 337,
+                                        lineNumber: 457,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -1538,7 +1652,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 346,
+                                        lineNumber: 466,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1560,19 +1674,19 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                         children: "SOLICITAR COTIZACIÓN"
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 354,
+                                        lineNumber: 474,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 185,
+                                lineNumber: 305,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/TrackingVIew.tsx",
-                        lineNumber: 168,
+                        lineNumber: 288,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1598,13 +1712,13 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                         children: "Frecuentes"
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 379,
+                                        lineNumber: 499,
                                         columnNumber: 138
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 379,
+                                lineNumber: 499,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1646,26 +1760,26 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                         children: faq.q
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 393,
+                                                        lineNumber: 513,
                                                         columnNumber: 21
                                                     }, this),
                                                     isOpen ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaChevronUp"], {
                                                         color: azulModerno
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 394,
+                                                        lineNumber: 514,
                                                         columnNumber: 31
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaChevronDown"], {
                                                         opacity: 0.5
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 394,
+                                                        lineNumber: 514,
                                                         columnNumber: 69
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 388,
+                                                lineNumber: 508,
                                                 columnNumber: 19
                                             }, this),
                                             isOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1679,31 +1793,31 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                 children: faq.a
                                             }, void 0, false, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 397,
+                                                lineNumber: 517,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, idx, true, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 384,
+                                        lineNumber: 504,
                                         columnNumber: 17
                                     }, this);
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 380,
+                                lineNumber: 500,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/TrackingVIew.tsx",
-                        lineNumber: 378,
+                        lineNumber: 498,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/TrackingVIew.tsx",
-                lineNumber: 140,
+                lineNumber: 203,
                 columnNumber: 7
             }, this)
         ]

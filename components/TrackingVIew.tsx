@@ -4,14 +4,13 @@ import ServiceItem from './ServiceItem';
 import { 
   FaChevronDown, 
   FaChevronUp, 
-  FaBoxOpen, 
   FaPlane, 
-  FaShieldAlt, 
-  FaWarehouse,
   FaShip,
   FaFileAlt,
   FaBox,
-  FaBatteryFull
+  FaBatteryFull,
+  FaSearch,
+  FaExternalLinkAlt
 } from 'react-icons/fa';
 
 interface PaqueteData {
@@ -48,6 +47,69 @@ export default function TrackingView({
   const [tipoCarga, setTipoCarga] = useState<'paquete' | 'documento'>('paquete');
   const [contieneBaterias, setContieneBaterias] = useState<'no' | 'si'>('no');
 
+  // --- DETECCIÓN AUTOMÁTICA DE COURIER Y GENERACIÓN DE DEEP-LINK OFICIAL ---
+  const obtenerCarrierYLink = (tracking: string) => {
+    const clean = tracking.trim().toUpperCase();
+    if (!clean) return null;
+
+    // Formato UPS: Empieza con 1Z
+    if (/^1Z[A-Z0-9]{16}$/i.test(clean)) {
+      return { 
+        nombre: 'UPS Express', 
+        color: '#ffb300', 
+        tag: '🤎 UPS Express',
+        url: `https://www.ups.com/track?tracknum=${clean}`
+      };
+    }
+    // Formato DHL: 10 dígitos o prefijo JJD/JD
+    if (/^\d{10}$/.test(clean) || /^JJD\d+$/i.test(clean)) {
+      return { 
+        nombre: 'DHL Express', 
+        color: '#ef4444', 
+        tag: '🟡 DHL Express',
+        url: `https://www.dhl.com/ar-es/home/tracking.html?tracking-id=${clean}`
+      };
+    }
+    // Formato FedEx: 12, 15 o 20 dígitos
+    if (/^(\d{12}|\d{15}|\d{20})$/.test(clean)) {
+      return { 
+        nombre: 'FedEx Express', 
+        color: '#a855f7', 
+        tag: '🟣 FedEx Express',
+        url: `https://www.fedex.com/fedextrack/?trknbr=${clean}`
+      };
+    }
+    // Formato USPS: 22 dígitos o termina en US
+    if (/^(94|92|93|91)\d{20}$/.test(clean) || /^[A-Z]{2}\d{9}US$/i.test(clean)) {
+      return { 
+        nombre: 'USPS (Correo USA)', 
+        color: '#3b82f6', 
+        tag: '🔵 USPS',
+        url: `https://tools.usps.com/go/TrackConfirmAction?tLabels=${clean}`
+      };
+    }
+
+    return { 
+      nombre: 'AndesBox Tracking', 
+      color: azulModerno, 
+      tag: '📦 AndesBox',
+      url: null 
+    };
+  };
+
+  // MANEJADOR INTELIGENTE DE BÚSQUEDA
+  const handleRastrearAccion = () => {
+    const carrierInfo = obtenerCarrierYLink(trackingBusqueda);
+    
+    // Si se detecta un courier internacional con enlace oficial, lo abre en nueva pestaña
+    if (carrierInfo && carrierInfo.url) {
+      window.open(carrierInfo.url, '_blank');
+    } else {
+      // Si es un código propio de AndesBox (o formato general), consulta la BD
+      buscarTracking();
+    }
+  };
+
   const toggleFaq = (index: number) => {
     setFaqAbierta(faqAbierta === index ? null : index);
   };
@@ -56,7 +118,6 @@ export default function TrackingView({
     { q: "¿Cómo funciona el servicio de AndesBox?", a: "Te asesoras con nostros nos comentas cual es tu proyecto ,  de que parte del mundo necesitas traer tus paquetes, cotizamos. Nosotros las recibimos y las traemos directo a Mendoza." },
     { q: "¿Cuánto demora en llegar mi paquete a Mendoza?", a: "Una vez que tu paquete es despachado, el tiempo estimado de transporte e ingreso al país es de entre 7 y 14 días hábiles hasta nuestras oficinas en Mendoza." },
     { q: "¿Qué costo tiene el servicio?", a: "Cobramos según el peso real del paquete en kilogramos y el tipo de mercadería (si requiere gestiones aduaneras especiales). Nos comunicamos con vos y cotizamos al momento tus envios." },
-    
   ];
 
   // --- ESTILOS AUXILIARES PARA EL COTIZADOR ---
@@ -100,6 +161,8 @@ export default function TrackingView({
     textTransform: 'uppercase' as const
   };
 
+  const carrierActual = obtenerCarrierYLink(trackingBusqueda);
+
   return (
     <>
       <section style={{ padding: '140px 5% 40px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -139,16 +202,73 @@ export default function TrackingView({
       {/* SECCIÓN DE FORMULARIOS */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '40px', padding: '40px 5%', maxWidth: '1200px', margin: '0 auto' }}>
         
-        {/* RASTREADOR DE PAQUETES (TRACKING INTERNACIONAL) */}
+        {/* RASTREADOR DE PAQUETES CON REDIRECCIÓN DE COURIERS */}
         <div style={{ width: '100%', maxWidth: '750px', backgroundColor: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(20px)', borderRadius: '35px', padding: 'clamp(20px, 5vw, 40px)', border: `1px solid rgba(255, 255, 255, 0.1)`, boxSizing: 'border-box' }}>
           <h2 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', fontWeight: '900', marginBottom: '20px', textAlign: 'center' }}>Rastreá tu Envío</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginBottom: '15px' }}>
-            <input type="text" placeholder="Nro de Tracking (Ej: AB-8492)" value={trackingBusqueda} onChange={(e) => setTrackingBusqueda(e.target.value)} style={{ padding: '15px', borderRadius: '15px', border: 'none', backgroundColor: 'rgba(255,255,255,0.1)', color: '#fff', outline: 'none', width: '100%', boxSizing: 'border-box' }} />
-            <input type="text" inputMode="tel" placeholder="Teléfono Registrado" value={telBusqueda} onChange={(e) => setTelBusqueda(e.target.value)} style={{ padding: '15px', borderRadius: '15px', border: 'none', backgroundColor: 'rgba(255,255,255,0.1)', color: '#fff', outline: 'none', width: '100%', boxSizing: 'border-box' }} />
-          </div>
-          <button onClick={buscarTracking} style={{ width: '100%', backgroundColor: azulModerno, color: '#fff', padding: '18px', borderRadius: '15px', fontWeight: '900', cursor: 'pointer', border: 'none', fontSize: '1rem', transition: 'all 0.3s' }}>{cargando ? 'LOCALIZANDO...' : 'BUSCAR PAQUETE'}</button>
           
-          {errorBusqueda && <p style={{ color: '#ff4b4b', textAlign: 'center', marginTop: '15px', fontSize: '0.9rem' }}>{errorBusqueda}</p>}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '15px' }}>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <input 
+                type="text" 
+                placeholder="Nro de Tracking (Ej: 1Z..., AB-8492)" 
+                value={trackingBusqueda} 
+                onChange={(e) => setTrackingBusqueda(e.target.value)} 
+                onKeyDown={(e) => e.key === 'Enter' && handleRastrearAccion()}
+                style={{ padding: '18px 20px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'rgba(255,255,255,0.08)', color: '#fff', outline: 'none', width: '100%', boxSizing: 'border-box', fontSize: '1rem', fontWeight: '600' }} 
+              />
+              
+              {/* BADGE DE CARRIER DETECTADO */}
+              {trackingBusqueda.trim().length > 3 && carrierActual && (
+                <div style={{
+                  fontSize: '0.78rem',
+                  fontWeight: 'bold',
+                  color: '#fff',
+                  backgroundColor: 'rgba(0,0,0,0.5)',
+                  padding: '6px 12px',
+                  borderRadius: '10px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  alignSelf: 'flex-start',
+                  border: `1px solid ${carrierActual.color}`,
+                  animation: 'fadeIn 0.2s ease-out'
+                }}>
+                  Empresa detectada: <span style={{ color: carrierActual.color }}>{carrierActual.tag}</span>
+                </div>
+              )}
+            </div>
+
+            <button 
+              onClick={handleRastrearAccion} 
+              style={{ 
+                width: '100%', 
+                backgroundColor: carrierActual?.url ? carrierActual.color : azulModerno, 
+                color: '#fff', 
+                padding: '18px', 
+                borderRadius: '16px', 
+                fontWeight: '900', 
+                cursor: 'pointer', 
+                border: 'none', 
+                fontSize: '1rem', 
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '10px',
+                transition: 'all 0.3s' 
+              }}
+            >
+              {cargando ? (
+                'LOCALIZANDO...'
+              ) : carrierActual?.url ? (
+                <>CONSULTAR EN PORTAL OFICIAL {carrierActual.nombre.toUpperCase()} <FaExternalLinkAlt size={14} /></>
+              ) : (
+                <><FaSearch /> RASTREAR EN ANDESBOX</>
+              )}
+            </button>
+          </div>
+          
+          {errorBusqueda && <p style={{ color: '#ff4b4b', textAlign: 'center', marginTop: '15px', fontSize: '0.9rem', fontWeight: '600' }}>{errorBusqueda}</p>}
           
           {paquete && (
             <div style={{ marginTop: '25px', padding: '20px', backgroundColor: 'rgba(0,0,0,0.4)', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.1)' }}>
