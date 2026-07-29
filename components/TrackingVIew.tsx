@@ -53,10 +53,10 @@ export default function TrackingView({
   };
 
   const listaFaqs = [
-    { q: "¿Cómo funciona el servicio de AndesBox?", a: "Te registrás con nosotros, te asignamos una dirección de casillero (Lockbox) propia en nuestro depósito de Miami, realizás tus compras online en cualquier tienda del mundo (Amazon, eBay, Apple) y las enviás a esa dirección. Nosotros las recibimos y las traemos directo a Mendoza." },
-    { q: "¿Cuánto demora en llegar mi paquete a Mendoza?", a: "Una vez que tu paquete es recibido en nuestro depósito de Miami, el tiempo estimado de transporte e ingreso al país es de entre 7 y 14 días hábiles hasta nuestras oficinas en Mendoza." },
-    { q: "¿Qué costo tiene el servicio?", a: "Cobramos según el peso real del paquete en kilogramos y el tipo de mercadería (si requiere gestiones aduaneras especiales). Podés usar nuestra calculadora integrada para estimar el costo exacto antes de comprar." },
-    { q: "¿Qué es una prealerta y por qué debo hacerla?", a: "Prealertar consiste en avisarnos que una compra va en camino a nuestro depósito en Miami. Nos adjuntás el número de tracking de la tienda de USA y la factura de compra para acelerar los tiempos de procesamiento y aduana." }
+    { q: "¿Cómo funciona el servicio de AndesBox?", a: "Te asesoras con nostros nos comentas cual es tu proyecto ,  de que parte del mundo necesitas traer tus paquetes, cotizamos. Nosotros las recibimos y las traemos directo a Mendoza." },
+    { q: "¿Cuánto demora en llegar mi paquete a Mendoza?", a: "Una vez que tu paquete es despachado, el tiempo estimado de transporte e ingreso al país es de entre 7 y 14 días hábiles hasta nuestras oficinas en Mendoza." },
+    { q: "¿Qué costo tiene el servicio?", a: "Cobramos según el peso real del paquete en kilogramos y el tipo de mercadería (si requiere gestiones aduaneras especiales). Nos comunicamos con vos y cotizamos al momento tus envios." },
+    
   ];
 
   // --- ESTILOS AUXILIARES PARA EL COTIZADOR ---
@@ -119,7 +119,7 @@ export default function TrackingView({
         </div>
 
         <p style={{ marginTop: '20px', color: 'rgba(255,255,255,0.7)', fontSize: 'clamp(1rem, 2.5vw, 1.25rem)', maxWidth: '600px', fontWeight: '400' }}>
-          Traé tecnología, ropa y repuestos de cualquier parte del mundo de forma rápida, segura y al mejor costo.
+          Traé tecnología, ropa, repuestos y documentacion de cualquier parte del mundo de forma rápida, segura y al mejor costo.
         </p>
         
         <h2 style={{ fontSize: '1.1rem', fontWeight: '800', letterSpacing: '4px', marginTop: '60px', marginBottom: '40px', opacity: 0.8, color: '#fff', textTransform: 'uppercase' }}>

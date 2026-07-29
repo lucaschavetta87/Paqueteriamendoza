@@ -503,19 +503,15 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
     const listaFaqs = [
         {
             q: "¿Cómo funciona el servicio de AndesBox?",
-            a: "Te registrás con nosotros, te asignamos una dirección de casillero (Lockbox) propia en nuestro depósito de Miami, realizás tus compras online en cualquier tienda del mundo (Amazon, eBay, Apple) y las enviás a esa dirección. Nosotros las recibimos y las traemos directo a Mendoza."
+            a: "Te asesoras con nostros nos comentas cual es tu proyecto ,  de que parte del mundo necesitas traer tus paquetes, cotizamos. Nosotros las recibimos y las traemos directo a Mendoza."
         },
         {
             q: "¿Cuánto demora en llegar mi paquete a Mendoza?",
-            a: "Una vez que tu paquete es recibido en nuestro depósito de Miami, el tiempo estimado de transporte e ingreso al país es de entre 7 y 14 días hábiles hasta nuestras oficinas en Mendoza."
+            a: "Una vez que tu paquete es despachado, el tiempo estimado de transporte e ingreso al país es de entre 7 y 14 días hábiles hasta nuestras oficinas en Mendoza."
         },
         {
             q: "¿Qué costo tiene el servicio?",
-            a: "Cobramos según el peso real del paquete en kilogramos y el tipo de mercadería (si requiere gestiones aduaneras especiales). Podés usar nuestra calculadora integrada para estimar el costo exacto antes de comprar."
-        },
-        {
-            q: "¿Qué es una prealerta y por qué debo hacerla?",
-            a: "Prealertar consiste en avisarnos que una compra va en camino a nuestro depósito en Miami. Nos adjuntás el número de tracking de la tienda de USA y la factura de compra para acelerar los tiempos de procesamiento y aduana."
+            a: "Cobramos según el peso real del paquete en kilogramos y el tipo de mercadería (si requiere gestiones aduaneras especiales). Nos comunicamos con vos y cotizamos al momento tus envios."
         }
     ];
     // --- ESTILOS AUXILIARES PARA EL COTIZADOR ---
@@ -617,7 +613,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                             maxWidth: '600px',
                             fontWeight: '400'
                         },
-                        children: "Traé tecnología, ropa y repuestos de cualquier parte del mundo de forma rápida, segura y al mejor costo."
+                        children: "Traé tecnología, ropa, repuestos y documentacion de cualquier parte del mundo de forma rápida, segura y al mejor costo."
                     }, void 0, false, {
                         fileName: "[project]/components/TrackingVIew.tsx",
                         lineNumber: 121,
@@ -1885,11 +1881,11 @@ function WebAndesBox() {
     ]);
     // --- ENVIAR PREALERTA / CONSULTA POR WHATSAPP ---
     const iniciarConsultaWhatsApp = ()=>{
-        let mensaje = `Hola AndesBox! Quiero cotizar/prealertar un envío:\n\n`;
+        let mensaje = `Hola AndesBox! Quiero cotizar un envío:\n\n`;
         mensaje += `- *Tipo de producto:* ${tipoProducto.toUpperCase()}\n`;
         mensaje += `- *Peso estimado:* ${pesoEstimado} kg\n`;
         mensaje += `- *Costo aproximado del flete:* USD ${costoEstimado.toFixed(2)}\n\n`;
-        mensaje += `¿Me podrían indicar los pasos para enviarlo a su depósito en el exterior?`;
+        mensaje += `¿Me podrían indicar los pasos para realizar importaciones?`;
         window.open(`https://wa.me/5492616852139?text=${encodeURIComponent(mensaje)}`, '_blank');
     };
     const estiloTab = (idTab)=>{

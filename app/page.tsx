@@ -88,11 +88,11 @@ export default function WebAndesBox() {
 
   // --- ENVIAR PREALERTA / CONSULTA POR WHATSAPP ---
   const iniciarConsultaWhatsApp = () => {
-    let mensaje = `Hola AndesBox! Quiero cotizar/prealertar un envío:\n\n`;
+    let mensaje = `Hola AndesBox! Quiero cotizar un envío:\n\n`;
     mensaje += `- *Tipo de producto:* ${tipoProducto.toUpperCase()}\n`;
     mensaje += `- *Peso estimado:* ${pesoEstimado} kg\n`;
     mensaje += `- *Costo aproximado del flete:* USD ${costoEstimado.toFixed(2)}\n\n`;
-    mensaje += `¿Me podrían indicar los pasos para enviarlo a su depósito en el exterior?`;
+    mensaje += `¿Me podrían indicar los pasos para realizar importaciones?`;
     
     window.open(`https://wa.me/5492616852139?text=${encodeURIComponent(mensaje)}`, '_blank');
   };
