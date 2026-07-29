@@ -490,10 +490,13 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$ico
 ;
 ;
 function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setTelBusqueda, buscarTracking, cargando, errorBusqueda, paquete, azulModerno }) {
-    // Estado para las FAQs
+    // --- ESTADO PARA LAS FAQS ---
     const [faqAbierta, setFaqAbierta] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
-    // Estado para el selector de tipo de producto en Prealerta
-    const [tipoEnvio, setTipoEnvio] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('');
+    // --- ESTADOS INTERACTIVOS PARA EL COTIZADOR ---
+    const [tipoOperacion, setTipoOperacion] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('importacion');
+    const [transporte, setTransporte] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('aereo');
+    const [tipoCarga, setTipoCarga] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('paquete');
+    const [contieneBaterias, setContieneBaterias] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('no');
     const toggleFaq = (index)=>{
         setFaqAbierta(faqAbierta === index ? null : index);
     };
@@ -515,6 +518,44 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
             a: "Prealertar consiste en avisarnos que una compra va en camino a nuestro depósito en Miami. Nos adjuntás el número de tracking de la tienda de USA y la factura de compra para acelerar los tiempos de procesamiento y aduana."
         }
     ];
+    // --- ESTILOS AUXILIARES PARA EL COTIZADOR ---
+    const estiloBotonSeleccion = (activo)=>({
+            flex: 1,
+            padding: '14px 10px',
+            borderRadius: '16px',
+            border: `1px solid ${activo ? azulModerno : 'rgba(255,255,255,0.12)'}`,
+            backgroundColor: activo ? `${azulModerno}25` : 'rgba(255,255,255,0.03)',
+            color: '#fff',
+            fontWeight: activo ? '800' : '500',
+            fontSize: '0.88rem',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            transition: 'all 0.25s ease',
+            boxShadow: activo ? `0 0 15px ${azulModerno}30` : 'none'
+        });
+    const estiloInput = {
+        padding: '15px',
+        borderRadius: '15px',
+        border: '1px solid rgba(255,255,255,0.1)',
+        backgroundColor: 'rgba(255,255,255,0.06)',
+        color: '#fff',
+        outline: 'none',
+        width: '100%',
+        boxSizing: 'border-box',
+        fontSize: '0.9rem'
+    };
+    const estiloLabel = {
+        fontSize: '0.8rem',
+        fontWeight: '700',
+        color: 'rgba(255,255,255,0.7)',
+        marginBottom: '6px',
+        display: 'block',
+        letterSpacing: '0.5px',
+        textTransform: 'uppercase'
+    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -542,11 +583,11 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                     fontSize: 'inherit',
                                     fontWeight: 'inherit'
                                 },
-                                children: "Tus Compras del Mundo"
+                                children: "Cruzamos fronteras"
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 52,
-                                columnNumber: 5
+                                lineNumber: 107,
+                                columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 style: {
@@ -556,17 +597,17 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                     WebkitBackgroundClip: 'text',
                                     WebkitTextFillColor: 'transparent'
                                 },
-                                children: "Directo a Mendoza"
+                                children: "Por vos"
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 55,
-                                columnNumber: 5
+                                lineNumber: 110,
+                                columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/TrackingVIew.tsx",
-                        lineNumber: 51,
-                        columnNumber: 3
+                        lineNumber: 106,
+                        columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         style: {
@@ -576,11 +617,11 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                             maxWidth: '600px',
                             fontWeight: '400'
                         },
-                        children: "Traé tecnología, ropa y repuestos desde Miami y el mundo de forma rápida, segura y al mejor costo."
+                        children: "Traé tecnología, ropa y repuestos de cualquier parte del mundo de forma rápida, segura y al mejor costo."
                     }, void 0, false, {
                         fileName: "[project]/components/TrackingVIew.tsx",
-                        lineNumber: 66,
-                        columnNumber: 3
+                        lineNumber: 121,
+                        columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                         style: {
@@ -596,8 +637,8 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                         children: "BENEFICIOS ANDESBOX"
                     }, void 0, false, {
                         fileName: "[project]/components/TrackingVIew.tsx",
-                        lineNumber: 70,
-                        columnNumber: 3
+                        lineNumber: 125,
+                        columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
@@ -609,12 +650,12 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                         },
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ServiceItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                title: "Depósito Propio en USA",
-                                icon: "🇺🇸",
-                                desc: "Dirección física y segura en Miami para centralizar todas tus compras globales."
+                                title: "Asesoramiento Personalizado",
+                                icon: "📦",
+                                desc: "Contanos tu proyecto y te damos el mejor asesoramiento."
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 74,
+                                lineNumber: 130,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ServiceItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -623,16 +664,16 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 desc: "Salidas constantes para garantizar que tus paquetes lleguen en tiempo récord."
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 75,
+                                lineNumber: 131,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ServiceItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                                 title: "Gestión Aduanera Completa",
                                 icon: "📑",
-                                desc: "Nos encargamos de todos los trámites de importación. Te olvidás del puerta a puerta."
+                                desc: "Nos encargamos de todos los trámites de importación. Te olvidás de tramites aduaneros."
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 76,
+                                lineNumber: 132,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ServiceItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -641,7 +682,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 desc: "Monitoreo constante de tu carga desde que llega a Miami hasta que entra a Mendoza."
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 77,
+                                lineNumber: 133,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ServiceItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -650,7 +691,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 desc: "Pagás exactamente por lo que pesa tu paquete. Sin sorpresas ni cargos ocultos."
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 78,
+                                lineNumber: 134,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ServiceItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -659,19 +700,19 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 desc: "Retirá en nuestra sucursal de Mendoza o coordinamos el envío a cualquier punto del país."
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 79,
+                                lineNumber: 135,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/TrackingVIew.tsx",
-                        lineNumber: 73,
+                        lineNumber: 129,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/TrackingVIew.tsx",
-                lineNumber: 50,
+                lineNumber: 105,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -688,7 +729,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
                             width: '100%',
-                            maxWidth: '700px',
+                            maxWidth: '750px',
                             backgroundColor: 'rgba(255, 255, 255, 0.05)',
                             backdropFilter: 'blur(20px)',
                             borderRadius: '35px',
@@ -704,22 +745,10 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                     marginBottom: '20px',
                                     textAlign: 'center'
                                 },
-                                children: [
-                                    "Rastreá tu ",
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        style: {
-                                            color: azulModerno
-                                        },
-                                        children: "Envío"
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 88,
-                                        columnNumber: 139
-                                    }, this)
-                                ]
-                            }, void 0, true, {
+                                children: "Rastreá tu Envío"
+                            }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 88,
+                                lineNumber: 144,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -747,7 +776,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 90,
+                                        lineNumber: 146,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -768,13 +797,13 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 91,
+                                        lineNumber: 147,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 89,
+                                lineNumber: 145,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -794,7 +823,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 children: cargando ? 'LOCALIZANDO...' : 'BUSCAR PAQUETE'
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 93,
+                                lineNumber: 149,
                                 columnNumber: 11
                             }, this),
                             errorBusqueda && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -807,7 +836,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 children: errorBusqueda
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 95,
+                                lineNumber: 151,
                                 columnNumber: 29
                             }, this),
                             paquete && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -835,12 +864,12 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                             children: paquete.estado_envio.toUpperCase()
                                         }, void 0, false, {
                                             fileName: "[project]/components/TrackingVIew.tsx",
-                                            lineNumber: 100,
+                                            lineNumber: 156,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 99,
+                                        lineNumber: 155,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -853,7 +882,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                         children: paquete.descripcion
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 102,
+                                        lineNumber: 158,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -875,7 +904,7 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 104,
+                                                lineNumber: 160,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -885,31 +914,31 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 105,
+                                                lineNumber: 161,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 103,
+                                        lineNumber: 159,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 98,
+                                lineNumber: 154,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/TrackingVIew.tsx",
-                        lineNumber: 87,
+                        lineNumber: 143,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
                             width: '100%',
-                            maxWidth: '700px',
+                            maxWidth: '750px',
                             backgroundColor: 'rgba(255, 255, 255, 0.05)',
                             backdropFilter: 'blur(20px)',
                             borderRadius: '35px',
@@ -922,25 +951,25 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 style: {
                                     fontSize: 'clamp(1.8rem, 5vw, 2.5rem)',
                                     fontWeight: '900',
-                                    marginBottom: '20px',
+                                    marginBottom: '8px',
                                     textAlign: 'center'
                                 },
                                 children: [
-                                    "Prealertar ",
+                                    "Cotizá tu ",
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         style: {
                                             color: azulModerno
                                         },
-                                        children: "Compra"
+                                        children: "Envío"
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 113,
-                                        columnNumber: 139
+                                        lineNumber: 179,
+                                        columnNumber: 23
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 113,
+                                lineNumber: 178,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -948,12 +977,12 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                     color: 'rgba(255,255,255,0.6)',
                                     fontSize: '0.9rem',
                                     textAlign: 'center',
-                                    marginBottom: '20px'
+                                    marginBottom: '30px'
                                 },
-                                children: "¿Ya compraste afuera? Avisanos adjuntando el tracking que te dio la tienda."
+                                children: "Configurá los datos de tu carga para recibir un presupuesto exacto."
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 114,
+                                lineNumber: 181,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -962,225 +991,558 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                 style: {
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    gap: '15px'
+                                    gap: '22px'
                                 },
                                 children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                        type: "hidden",
+                                        name: "Tipo_Operacion",
+                                        value: tipoOperacion
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                        lineNumber: 188,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                        type: "hidden",
+                                        name: "Medio_Transporte",
+                                        value: transporte
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                        lineNumber: 189,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                        type: "hidden",
+                                        name: "Tipo_Carga",
+                                        value: tipoCarga
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                        lineNumber: 190,
+                                        columnNumber: 13
+                                    }, this),
+                                    tipoCarga === 'paquete' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                        type: "hidden",
+                                        name: "Contiene_Baterias",
+                                        value: contieneBaterias
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                        lineNumber: 191,
+                                        columnNumber: 41
+                                    }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        style: {
-                                            display: 'grid',
-                                            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                                            gap: '15px'
-                                        },
                                         children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                type: "text",
-                                                name: "nombre",
-                                                placeholder: "Tu Nombre y Apellido",
-                                                required: true,
-                                                style: {
-                                                    padding: '15px',
-                                                    borderRadius: '15px',
-                                                    border: 'none',
-                                                    backgroundColor: 'rgba(255,255,255,0.1)',
-                                                    color: '#fff',
-                                                    outline: 'none',
-                                                    width: '100%',
-                                                    boxSizing: 'border-box'
-                                                }
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                style: estiloLabel,
+                                                children: "1. Sentido de la Operación"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 117,
+                                                lineNumber: 195,
                                                 columnNumber: 15
                                             }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                type: "text",
-                                                name: "telefono",
-                                                inputMode: "tel",
-                                                placeholder: "WhatsApp de Contacto",
-                                                required: true,
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 style: {
-                                                    padding: '15px',
-                                                    borderRadius: '15px',
-                                                    border: 'none',
-                                                    backgroundColor: 'rgba(255,255,255,0.1)',
-                                                    color: '#fff',
-                                                    outline: 'none',
-                                                    width: '100%',
-                                                    boxSizing: 'border-box'
-                                                }
-                                            }, void 0, false, {
+                                                    display: 'flex',
+                                                    gap: '10px'
+                                                },
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        type: "button",
+                                                        style: estiloBotonSeleccion(tipoOperacion === 'importacion'),
+                                                        onClick: ()=>setTipoOperacion('importacion'),
+                                                        children: "📥 Importación (Traer a ARG)"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                        lineNumber: 197,
+                                                        columnNumber: 17
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        type: "button",
+                                                        style: estiloBotonSeleccion(tipoOperacion === 'exportacion'),
+                                                        onClick: ()=>setTipoOperacion('exportacion'),
+                                                        children: "📤 Exportación (Enviar al exterior)"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                        lineNumber: 204,
+                                                        columnNumber: 17
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 118,
+                                                lineNumber: 196,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 116,
+                                        lineNumber: 194,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        style: {
-                                            display: 'grid',
-                                            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                                            gap: '15px'
-                                        },
                                         children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                type: "text",
-                                                name: "tracking_usa",
-                                                placeholder: "Tracking de USA (UPS, FedEx, USPS)",
-                                                required: true,
-                                                style: {
-                                                    padding: '15px',
-                                                    borderRadius: '15px',
-                                                    border: 'none',
-                                                    backgroundColor: 'rgba(255,255,255,0.1)',
-                                                    color: '#fff',
-                                                    outline: 'none',
-                                                    width: '100%',
-                                                    boxSizing: 'border-box'
-                                                }
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                style: estiloLabel,
+                                                children: "2. Vía de Transporte y Ubicación"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 122,
+                                                lineNumber: 216,
                                                 columnNumber: 15
                                             }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                type: "text",
-                                                name: "tienda_origen",
-                                                placeholder: "¿Dónde compraste? (Amazon, eBay...)",
-                                                required: true,
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 style: {
-                                                    padding: '15px',
-                                                    borderRadius: '15px',
-                                                    border: 'none',
-                                                    backgroundColor: 'rgba(255,255,255,0.1)',
-                                                    color: '#fff',
-                                                    outline: 'none',
-                                                    width: '100%',
-                                                    boxSizing: 'border-box'
-                                                }
-                                            }, void 0, false, {
+                                                    display: 'grid',
+                                                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                                                    gap: '12px',
+                                                    marginBottom: '12px'
+                                                },
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        type: "button",
+                                                        style: estiloBotonSeleccion(transporte === 'aereo'),
+                                                        onClick: ()=>setTransporte('aereo'),
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaPlane"], {
+                                                                size: 16
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 223,
+                                                                columnNumber: 19
+                                                            }, this),
+                                                            " Aéreo Express"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                        lineNumber: 218,
+                                                        columnNumber: 17
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        type: "button",
+                                                        style: estiloBotonSeleccion(transporte === 'maritimo'),
+                                                        onClick: ()=>setTransporte('maritimo'),
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaShip"], {
+                                                                size: 16
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 230,
+                                                                columnNumber: 19
+                                                            }, this),
+                                                            " Carga Marítima"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                        lineNumber: 225,
+                                                        columnNumber: 17
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 123,
+                                                lineNumber: 217,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    display: 'grid',
+                                                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                                                    gap: '12px'
+                                                },
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "text",
+                                                        name: "origen",
+                                                        placeholder: tipoOperacion === 'importacion' ? "Origen (Ej: Miami, China, Madrid)" : "Origen (Ej: Mendoza, Argentina)",
+                                                        required: true,
+                                                        style: estiloInput
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                        lineNumber: 235,
+                                                        columnNumber: 17
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "text",
+                                                        name: "codigo_postal_destino",
+                                                        placeholder: "Código Postal de Destino",
+                                                        required: true,
+                                                        style: estiloInput
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                        lineNumber: 242,
+                                                        columnNumber: 17
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                lineNumber: 234,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 121,
+                                        lineNumber: 215,
                                         columnNumber: 13
                                     }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                        name: "categoria_producto",
-                                        value: tipoEnvio,
-                                        onChange: (e)=>setTipoEnvio(e.target.value),
-                                        required: true,
-                                        style: {
-                                            padding: '15px',
-                                            borderRadius: '15px',
-                                            border: 'none',
-                                            backgroundColor: 'rgba(255,255,255,0.1)',
-                                            color: '#fff',
-                                            outline: 'none',
-                                            width: '100%',
-                                            boxSizing: 'border-box',
-                                            cursor: 'pointer'
-                                        },
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                value: "",
-                                                disabled: true,
-                                                style: {
-                                                    background: '#0f172a'
-                                                },
-                                                children: "Tipo de mercadería (Seleccioná una categoría)"
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                style: estiloLabel,
+                                                children: "3. ¿Qué vas a enviar?"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 133,
+                                                lineNumber: 254,
                                                 columnNumber: 15
                                             }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                value: "Tecnología / Electrónica",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 style: {
-                                                    background: '#0f172a'
+                                                    display: 'flex',
+                                                    gap: '10px',
+                                                    marginBottom: '15px'
                                                 },
-                                                children: "💻 Tecnología / Componentes / Celulares"
-                                            }, void 0, false, {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        type: "button",
+                                                        style: estiloBotonSeleccion(tipoCarga === 'documento'),
+                                                        onClick: ()=>setTipoCarga('documento'),
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaFileAlt"], {
+                                                                size: 16
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 261,
+                                                                columnNumber: 19
+                                                            }, this),
+                                                            " Documentación / Sobre"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                        lineNumber: 256,
+                                                        columnNumber: 17
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                        type: "button",
+                                                        style: estiloBotonSeleccion(tipoCarga === 'paquete'),
+                                                        onClick: ()=>setTipoCarga('paquete'),
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaBox"], {
+                                                                size: 16
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 268,
+                                                                columnNumber: 19
+                                                            }, this),
+                                                            " Paquete / Mercadería"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                        lineNumber: 263,
+                                                        columnNumber: 17
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 134,
+                                                lineNumber: 255,
                                                 columnNumber: 15
                                             }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                value: "Indumentaria y Calzado",
-                                                style: {
-                                                    background: '#0f172a'
-                                                },
-                                                children: "👟 Ropa / Zapatillas / Accesorios de moda"
+                                            tipoCarga === 'documento' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                    type: "text",
+                                                    name: "peso_documento",
+                                                    placeholder: "Peso estimado del sobre (Ej: 200g, 0.5 kg)",
+                                                    required: true,
+                                                    style: estiloInput
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/TrackingVIew.tsx",
+                                                    lineNumber: 275,
+                                                    columnNumber: 19
+                                                }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 135,
+                                                lineNumber: 274,
+                                                columnNumber: 17
+                                            }, this) : /* CAMPOS CONDICIONALES PARA PAQUETES Y MERCADERÍA */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                style: {
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    gap: '12px'
+                                                },
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                style: {
+                                                                    fontSize: '0.8rem',
+                                                                    color: 'rgba(255,255,255,0.8)',
+                                                                    marginBottom: '8px',
+                                                                    display: 'block'
+                                                                },
+                                                                children: "⚡ ¿El paquete contiene baterías de Litio o equipos electrónicos con batería integrada?"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 289,
+                                                                columnNumber: 21
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                style: {
+                                                                    display: 'flex',
+                                                                    gap: '10px'
+                                                                },
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                        type: "button",
+                                                                        style: estiloBotonSeleccion(contieneBaterias === 'no'),
+                                                                        onClick: ()=>setContieneBaterias('no'),
+                                                                        children: "No contiene baterías"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                                        lineNumber: 293,
+                                                                        columnNumber: 23
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                        type: "button",
+                                                                        style: estiloBotonSeleccion(contieneBaterias === 'si'),
+                                                                        onClick: ()=>setContieneBaterias('si'),
+                                                                        children: [
+                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaBatteryFull"], {
+                                                                                color: "#f59e0b",
+                                                                                size: 14
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                                lineNumber: 305,
+                                                                                columnNumber: 25
+                                                                            }, this),
+                                                                            " Sí, contiene batería"
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                                        lineNumber: 300,
+                                                                        columnNumber: 23
+                                                                    }, this)
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 292,
+                                                                columnNumber: 21
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                        lineNumber: 288,
+                                                        columnNumber: 19
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                                        name: "categoria_mercaderia",
+                                                        defaultValue: "",
+                                                        required: true,
+                                                        style: {
+                                                            ...estiloInput,
+                                                            cursor: 'pointer'
+                                                        },
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                value: "",
+                                                                disabled: true,
+                                                                style: {
+                                                                    background: '#0f172a'
+                                                                },
+                                                                children: "Tipo de mercadería (Seleccioná una categoría)"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 317,
+                                                                columnNumber: 21
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                value: "Tecnologia",
+                                                                style: {
+                                                                    background: '#0f172a'
+                                                                },
+                                                                children: "💻 Electrónica / Celulares / Componentes"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 318,
+                                                                columnNumber: 21
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                value: "Indumentaria",
+                                                                style: {
+                                                                    background: '#0f172a'
+                                                                },
+                                                                children: "👟 Ropa / Zapatillas / Calzado"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 319,
+                                                                columnNumber: 21
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                value: "Repuestos",
+                                                                style: {
+                                                                    background: '#0f172a'
+                                                                },
+                                                                children: "⚙️ Repuestos automotores o industriales"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 320,
+                                                                columnNumber: 21
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                value: "Cosmetica/Suplementos",
+                                                                style: {
+                                                                    background: '#0f172a'
+                                                                },
+                                                                children: "🧴 Cosmética / Suplementos permitidos"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 321,
+                                                                columnNumber: 21
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                                value: "CargaGeneral",
+                                                                style: {
+                                                                    background: '#0f172a'
+                                                                },
+                                                                children: "📦 Carga General / Otros"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 322,
+                                                                columnNumber: 21
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                        lineNumber: 311,
+                                                        columnNumber: 19
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        style: {
+                                                            display: 'grid',
+                                                            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+                                                            gap: '10px'
+                                                        },
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                                type: "number",
+                                                                step: "0.1",
+                                                                name: "peso_kg",
+                                                                placeholder: "Peso (Kg)",
+                                                                required: true,
+                                                                style: estiloInput
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 327,
+                                                                columnNumber: 21
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                                type: "number",
+                                                                name: "alto_cm",
+                                                                placeholder: "Alto (cm)",
+                                                                required: true,
+                                                                style: estiloInput
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 328,
+                                                                columnNumber: 21
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                                type: "number",
+                                                                name: "ancho_cm",
+                                                                placeholder: "Ancho (cm)",
+                                                                required: true,
+                                                                style: estiloInput
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 329,
+                                                                columnNumber: 21
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                                type: "number",
+                                                                name: "largo_cm",
+                                                                placeholder: "Largo (cm)",
+                                                                required: true,
+                                                                style: estiloInput
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                                lineNumber: 330,
+                                                                columnNumber: 21
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                        lineNumber: 326,
+                                                        columnNumber: 19
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                lineNumber: 285,
+                                                columnNumber: 17
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                        lineNumber: 253,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                style: estiloLabel,
+                                                children: "4. Datos de Contacto"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/TrackingVIew.tsx",
+                                                lineNumber: 338,
                                                 columnNumber: 15
                                             }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                value: "Repuestos",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 style: {
-                                                    background: '#0f172a'
+                                                    display: 'grid',
+                                                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                                                    gap: '12px'
                                                 },
-                                                children: "⚙️ Repuestos (Autos, motos, herramientas)"
-                                            }, void 0, false, {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "text",
+                                                        name: "nombre_cliente",
+                                                        placeholder: "Tu Nombre y Apellido",
+                                                        required: true,
+                                                        style: estiloInput
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                        lineNumber: 340,
+                                                        columnNumber: 17
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                        type: "text",
+                                                        name: "telefono_whatsapp",
+                                                        inputMode: "tel",
+                                                        placeholder: "WhatsApp (Ej: +54 9 261...)",
+                                                        required: true,
+                                                        style: estiloInput
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/TrackingVIew.tsx",
+                                                        lineNumber: 341,
+                                                        columnNumber: 17
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 136,
-                                                columnNumber: 15
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                value: "Coleccionables / Juguetes",
-                                                style: {
-                                                    background: '#0f172a'
-                                                },
-                                                children: "🧸 Figuras de acción / Libros / Coleccionables"
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 137,
-                                                columnNumber: 15
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                value: "Carga General",
-                                                style: {
-                                                    background: '#0f172a'
-                                                },
-                                                children: "📦 Productos generales / Cosmética permitida"
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 138,
+                                                lineNumber: 339,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 126,
+                                        lineNumber: 337,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
-                                        name: "descripcion_paquete",
-                                        placeholder: "Describí brevemente qué contiene el paquete (Ej: 1 campera y 2 remeras) junto al valor aproximado en USD.",
-                                        required: true,
-                                        rows: 3,
+                                        name: "observaciones_adicionales",
+                                        placeholder: "¿Algún detalle o consulta adicional? (Ej: Valor aproximado en USD de la mercadería)",
+                                        rows: 2,
                                         style: {
-                                            padding: '15px',
-                                            borderRadius: '15px',
-                                            border: 'none',
-                                            backgroundColor: 'rgba(255,255,255,0.1)',
-                                            color: '#fff',
-                                            resize: 'none',
-                                            outline: 'none',
-                                            width: '100%',
-                                            boxSizing: 'border-box'
+                                            ...estiloInput,
+                                            resize: 'none'
                                         }
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 141,
+                                        lineNumber: 346,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1190,35 +1552,37 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                             backgroundColor: azulModerno,
                                             color: '#fff',
                                             padding: '18px',
-                                            borderRadius: '15px',
+                                            borderRadius: '16px',
                                             fontWeight: '900',
                                             cursor: 'pointer',
                                             border: 'none',
                                             fontSize: '1rem',
-                                            transition: 'all 0.3s'
+                                            letterSpacing: '1px',
+                                            transition: 'all 0.3s ease',
+                                            boxShadow: `0 8px 20px ${azulModerno}40`
                                         },
-                                        children: "REGISTRAR PREALERTA"
+                                        children: "SOLICITAR COTIZACIÓN"
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 149,
+                                        lineNumber: 354,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 115,
+                                lineNumber: 185,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/TrackingVIew.tsx",
-                        lineNumber: 112,
+                        lineNumber: 168,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         style: {
                             width: '100%',
-                            maxWidth: '700px',
+                            maxWidth: '750px',
                             marginTop: '20px'
                         },
                         children: [
@@ -1238,13 +1602,13 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                         children: "Frecuentes"
                                     }, void 0, false, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 155,
+                                        lineNumber: 379,
                                         columnNumber: 138
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 155,
+                                lineNumber: 379,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1286,26 +1650,26 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                         children: faq.q
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 169,
+                                                        lineNumber: 393,
                                                         columnNumber: 21
                                                     }, this),
                                                     isOpen ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaChevronUp"], {
                                                         color: azulModerno
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 170,
+                                                        lineNumber: 394,
                                                         columnNumber: 31
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["FaChevronDown"], {
                                                         opacity: 0.5
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                                        lineNumber: 170,
+                                                        lineNumber: 394,
                                                         columnNumber: 69
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 164,
+                                                lineNumber: 388,
                                                 columnNumber: 19
                                             }, this),
                                             isOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1319,31 +1683,31 @@ function TrackingView({ trackingBusqueda, setTrackingBusqueda, telBusqueda, setT
                                                 children: faq.a
                                             }, void 0, false, {
                                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                                lineNumber: 173,
+                                                lineNumber: 397,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, idx, true, {
                                         fileName: "[project]/components/TrackingVIew.tsx",
-                                        lineNumber: 160,
+                                        lineNumber: 384,
                                         columnNumber: 17
                                     }, this);
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/components/TrackingVIew.tsx",
-                                lineNumber: 156,
+                                lineNumber: 380,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/TrackingVIew.tsx",
-                        lineNumber: 154,
+                        lineNumber: 378,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/TrackingVIew.tsx",
-                lineNumber: 84,
+                lineNumber: 140,
                 columnNumber: 7
             }, this)
         ]
@@ -1450,9 +1814,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$WhatsAppChat$2
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$react$2d$icons$2f$fa$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/react-icons/fa/index.mjs [app-ssr] (ecmascript)");
 // Componentes modulares adaptados a AndesBox
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Navbar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/Navbar.tsx [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$TrackingVIew$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/TrackingVIew.tsx [app-ssr] (ecmascript)"); // Reemplaza a CatalogoView (Tracking/Resumen)
-var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$CalculadoraView$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/CalculadoraView.tsx [app-ssr] (ecmascript)"); // Reemplaza a CatalogoView (Calculadora/Cotizador)
-var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$InfoSidebar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/InfoSidebar.tsx [app-ssr] (ecmascript)"); // Reemplaza a CartSidebar (Resumen/Prealerta)
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$TrackingVIew$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/TrackingVIew.tsx [app-ssr] (ecmascript)"); // Import corregido
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$CalculadoraView$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/CalculadoraView.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$InfoSidebar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/InfoSidebar.tsx [app-ssr] (ecmascript)");
 "use client";
 ;
 ;
@@ -1478,7 +1842,7 @@ function WebAndesBox() {
     const [tipoProducto, setTipoProducto] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('general');
     const [mostrarResumen, setMostrarResumen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [notificacion, setNotificacion] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
-    // --- COTIZADOR EN TIEMPO REAL (Usa useMemo igual que tus filtros anteriores) ---
+    // --- COTIZADOR EN TIEMPO REAL ---
     const costoEstimado = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
         // Tarifas de ejemplo por KG según categoría
         const tarifaBasePorKg = 15; // USD por ejemplo
@@ -1499,7 +1863,6 @@ function WebAndesBox() {
         setErrorBusqueda('');
         setPaquete(null);
         try {
-            // Modificá 'paquetes' por el nombre real de tu tabla en Supabase
             const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].from('paquetes').select('tracking_id, descripcion, estado_envio, peso_kg, fecha_actualizacion').eq('telefono_cliente', telBusqueda.trim()).eq('tracking_id', trackingBusqueda.trim()).maybeSingle();
             if (error || !data) {
                 setErrorBusqueda('No encontramos ningún paquete con esos datos de envío.');
@@ -1527,7 +1890,7 @@ function WebAndesBox() {
         mensaje += `- *Peso estimado:* ${pesoEstimado} kg\n`;
         mensaje += `- *Costo aproximado del flete:* USD ${costoEstimado.toFixed(2)}\n\n`;
         mensaje += `¿Me podrían indicar los pasos para enviarlo a su depósito en el exterior?`;
-        window.open(`https://wa.me/5492614603074?text=${encodeURIComponent(mensaje)}`, '_blank');
+        window.open(`https://wa.me/5492616852139?text=${encodeURIComponent(mensaje)}`, '_blank');
     };
     const estiloTab = (idTab)=>{
         const esActivo = tipoProducto === idTab;
@@ -1554,7 +1917,12 @@ function WebAndesBox() {
             backgroundColor: '#000',
             color: '#fff',
             fontFamily: 'sans-serif',
-            overflowX: 'hidden'
+            overflowX: 'hidden',
+            /* --- ESTILOS DEL FONDO FIJO (PARALLAX) --- */ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url('/fondo-logistica.jpeg')`,
+            backgroundAttachment: 'fixed',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover'
         },
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1568,7 +1936,7 @@ function WebAndesBox() {
                         azulModerno: azulModerno
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 128,
+                        lineNumber: 139,
                         columnNumber: 9
                     }, this),
                     vista === 'inicio' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$TrackingVIew$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -1583,7 +1951,7 @@ function WebAndesBox() {
                         azulModerno: azulModerno
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 136,
+                        lineNumber: 146,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$CalculadoraView$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                         pesoEstimado: pesoEstimado,
@@ -1596,12 +1964,12 @@ function WebAndesBox() {
                         estiloTab: estiloTab
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 148,
+                        lineNumber: 158,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$WhatsAppChat$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 162,
+                        lineNumber: 170,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("footer", {
@@ -1614,13 +1982,13 @@ function WebAndesBox() {
                         children: "© 2026 AndesBox - Envíos Internacionales"
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 163,
+                        lineNumber: 171,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 125,
+                lineNumber: 136,
                 columnNumber: 7
             }, this),
             mostrarResumen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$InfoSidebar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -1630,7 +1998,7 @@ function WebAndesBox() {
                 iniciarConsultaWhatsApp: iniciarConsultaWhatsApp
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 168,
+                lineNumber: 176,
                 columnNumber: 9
             }, this),
             notificacion && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1658,7 +2026,7 @@ function WebAndesBox() {
                         size: 18
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 179,
+                        lineNumber: 187,
                         columnNumber: 11
                     }, this),
                     " ",
@@ -1666,13 +2034,13 @@ function WebAndesBox() {
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 178,
+                lineNumber: 186,
                 columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/page.tsx",
-        lineNumber: 122,
+        lineNumber: 120,
         columnNumber: 5
     }, this);
 }

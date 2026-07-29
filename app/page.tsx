@@ -3,14 +3,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
 import WhatsAppChat from '../components/WhatsAppChat';
-import { FaCheckCircle, FaCalculator } from 'react-icons/fa';
-import GoogleReviews from '../components/GoogleReviews';
+import { FaCheckCircle } from 'react-icons/fa';
 
 // Componentes modulares adaptados a AndesBox
 import Navbar from '../components/Navbar';
-import TrackingView from '../components/TrackingVIew'; // Reemplaza a CatalogoView (Tracking/Resumen)
-import CalculadoraView from '../components/CalculadoraView'; // Reemplaza a CatalogoView (Calculadora/Cotizador)
-import InfoSidebar from '../components/InfoSidebar'; // Reemplaza a CartSidebar (Resumen/Prealerta)
+import TrackingView from '../components/TrackingVIew'; // Import corregido
+import CalculadoraView from '../components/CalculadoraView'; 
+import InfoSidebar from '../components/InfoSidebar'; 
 
 interface PaqueteData {
   tracking_id: string;
@@ -39,7 +38,7 @@ export default function WebAndesBox() {
   const [mostrarResumen, setMostrarResumen] = useState(false);
   const [notificacion, setNotificacion] = useState<string | null>(null);
 
-  // --- COTIZADOR EN TIEMPO REAL (Usa useMemo igual que tus filtros anteriores) ---
+  // --- COTIZADOR EN TIEMPO REAL ---
   const costoEstimado = useMemo(() => {
     // Tarifas de ejemplo por KG según categoría
     const tarifaBasePorKg = 15; // USD por ejemplo
@@ -61,7 +60,6 @@ export default function WebAndesBox() {
     setPaquete(null);
     
     try {
-      // Modificá 'paquetes' por el nombre real de tu tabla en Supabase
       const { data, error } = await supabase
         .from('paquetes')
         .select('tracking_id, descripcion, estado_envio, peso_kg, fecha_actualizacion')
@@ -96,7 +94,7 @@ export default function WebAndesBox() {
     mensaje += `- *Costo aproximado del flete:* USD ${costoEstimado.toFixed(2)}\n\n`;
     mensaje += `¿Me podrían indicar los pasos para enviarlo a su depósito en el exterior?`;
     
-    window.open(`https://wa.me/5492614603074?text=${encodeURIComponent(mensaje)}`, '_blank');
+    window.open(`https://wa.me/5492616852139?text=${encodeURIComponent(mensaje)}`, '_blank');
   };
 
   const estiloTab = (idTab: 'tecnologia' | 'indumentaria' | 'general') => {
@@ -119,9 +117,22 @@ export default function WebAndesBox() {
   };
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh', backgroundColor: '#000', color: '#fff', fontFamily: 'sans-serif', overflowX: 'hidden' }}>
-      
-      {/* QUITAMOS AURORA: Fondo Negro Minimalista directo */}
+    <div 
+      style={{ 
+        position: 'relative', 
+        minHeight: '100vh', 
+        backgroundColor: '#000', 
+        color: '#fff', 
+        fontFamily: 'sans-serif', 
+        overflowX: 'hidden',
+        /* --- ESTILOS DEL FONDO FIJO (PARALLAX) --- */
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url('/fondo-logistica.jpeg')`,
+        backgroundAttachment: 'fixed',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover'
+      }}
+    >
       <div style={{ position: 'relative', zIndex: 1 }}>
         
         {/* Navbar adaptado para AndesBox */}
@@ -129,7 +140,6 @@ export default function WebAndesBox() {
           setVista={setVista} 
           azulModerno={azulModerno} 
         />
-        
 
         {/* VISTAS DINÁMICAS */}
         {vista === 'inicio' ? (
@@ -156,8 +166,6 @@ export default function WebAndesBox() {
             estiloTab={estiloTab} 
           />
         )}
-
-        
 
         <WhatsAppChat />
         <footer style={{ textAlign: 'center', padding: '40px 5%', opacity: 0.4, fontSize: '0.8rem' }}>© 2026 AndesBox - Envíos Internacionales</footer>
