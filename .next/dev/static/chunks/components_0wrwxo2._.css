@@ -1,0 +1,180 @@
+/* [project]/components/Aurora.css [app-client] (css) */
+.aurora-container {
+  width: 100%;
+  height: 100%;
+}
+
+/* [project]/components/TrueFocus.css [app-client] (css) */
+.focus-container {
+  -webkit-user-select: none;
+  user-select: none;
+  outline: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  display: flex;
+  position: relative;
+}
+
+.focus-word {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  outline: none;
+  font-size: 3rem;
+  font-weight: 900;
+  transition: filter .3s, color .3s;
+  position: relative;
+}
+
+.focus-word.active {
+  filter: blur();
+}
+
+.focus-frame {
+  pointer-events: none;
+  box-sizing: content-box;
+  border: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.corner {
+  border: 3px solid var(--border-color, #fff);
+  width: 1rem;
+  height: 1rem;
+  filter: drop-shadow(0px 0px 4px var(--border-color, #fff));
+  border-radius: 3px;
+  transition: none;
+  position: absolute;
+}
+
+.focus-container {
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+  position: relative;
+}
+
+.focus-word {
+  letter-spacing: -1px;
+  cursor: default;
+  z-index: 1;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 900;
+  position: relative;
+}
+
+.focus-frame {
+  border: 2px solid var(--border-color);
+  box-shadow: 0 0 15px var(--glow-color);
+  pointer-events: none;
+  background-color: #0000;
+  border-radius: 4px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.corner {
+  border: 2px solid var(--border-color);
+  width: 6px;
+  height: 6px;
+  position: absolute;
+}
+
+.top-left {
+  border-bottom: none;
+  border-right: none;
+  top: -4px;
+  left: -4px;
+}
+
+.top-right {
+  border-bottom: none;
+  border-left: none;
+  top: -4px;
+  right: -4px;
+}
+
+.bottom-left {
+  border-top: none;
+  border-right: none;
+  bottom: -4px;
+  left: -4px;
+}
+
+.bottom-right {
+  border-top: none;
+  border-left: none;
+  bottom: -4px;
+  right: -4px;
+}
+
+/* [project]/components/ElectricBorder.css [app-client] (css) */
+.electric-border {
+  --electric-light-color: oklch(from var(--electric-border-color) l c h);
+  border-radius: inherit;
+  isolation: isolate;
+  position: relative;
+  overflow: visible;
+}
+
+.eb-canvas-container {
+  pointer-events: none;
+  z-index: 2;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.eb-canvas {
+  display: block;
+}
+
+.eb-content {
+  border-radius: inherit;
+  z-index: 1;
+  position: relative;
+}
+
+.eb-layers {
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  position: absolute;
+  inset: 0;
+}
+
+.eb-glow-1, .eb-glow-2, .eb-background-glow {
+  border-radius: inherit;
+  pointer-events: none;
+  box-sizing: border-box;
+  position: absolute;
+  inset: 0;
+}
+
+.eb-glow-1 {
+  border: 2px solid oklch(from var(--electric-border-color) l c h / .6);
+  filter: blur(1px);
+}
+
+.eb-glow-2 {
+  border: 2px solid var(--electric-light-color);
+  filter: blur(4px);
+}
+
+.eb-background-glow {
+  z-index: -1;
+  filter: blur(32px);
+  opacity: .3;
+  background: linear-gradient(-30deg, var(--electric-light-color), transparent, var(--electric-border-color));
+  transform: scale(1.1);
+}
+
+/*# sourceMappingURL=components_0wrwxo2._.css.map*/
