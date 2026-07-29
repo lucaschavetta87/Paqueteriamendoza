@@ -88,7 +88,7 @@ export default function Navbar({ setVista, azulModerno }: NavbarProps) {
           .sidebar-menu { max-width: 310px !important; padding: 30px 20px !important; }
         }
 
-        /* --- ESTILOS DEL MENÚ DESPLEGABLE LATERAL --- */
+        /* --- ESTILOS DEL MENÚ DESPLEGABLE LATERAL CON FONDO MAPA --- */
         .sidebar-overlay {
           position: fixed;
           top: 0;
@@ -115,7 +115,11 @@ export default function Navbar({ setVista, azulModerno }: NavbarProps) {
           width: 100%;
           max-width: 380px;
           height: 100vh;
-          background-color: rgba(10, 15, 26, 0.95);
+          /* REEMPLAZAMOS EL AZUL PLANO POR LA IMAGEN CON DEGRADADO OSCURO */
+          background-image: linear-gradient(rgba(8, 12, 22, 0.85), rgba(8, 12, 22, 0.95)), url('/fondo-mapa.jpeg');
+          background-position: center;
+          background-size: cover;
+          background-repeat: no-repeat;
           backdrop-filter: blur(25px);
           border-left: 1px solid rgba(255, 255, 255, 0.12);
           z-index: 160;
@@ -178,7 +182,7 @@ export default function Navbar({ setVista, azulModerno }: NavbarProps) {
               <Globe size={16} color={azulModerno} /> 
               <span className="logo-text">Sobre Nosotros</span>
             </h3>
-            <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.75)', lineHeight: '1.6', margin: 0 }}>
+            <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.85)', lineHeight: '1.6', margin: 0 }}>
               Somos tu nexo logístico en Mendoza para compras e importaciones internacionales. Nos encargamos del transporte aéreo y marítimo, la gestión aduanera y el seguimiento punto a punto para que tus paquetes lleguen seguros y a tiempo.
             </p>
           </div>
@@ -197,7 +201,7 @@ export default function Navbar({ setVista, azulModerno }: NavbarProps) {
                 href="https://wa.me/5492616852139" 
                 target="_blank" 
                 rel="noreferrer"
-                style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: '#fff', backgroundColor: 'rgba(255,255,255,0.05)', padding: '12px 15px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.08)', transition: 'all 0.3s' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: '#fff', backgroundColor: 'rgba(255,255,255,0.06)', padding: '12px 15px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)', transition: 'all 0.3s' }}
               >
                 <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: '#10b98125', color: '#10b981', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                   <MessageSquare size={18} />
@@ -209,7 +213,7 @@ export default function Navbar({ setVista, azulModerno }: NavbarProps) {
               </a>
 
               {/* UBICACIÓN REAL */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', backgroundColor: 'rgba(255,255,255,0.05)', padding: '12px 15px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.08)' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', backgroundColor: 'rgba(255,255,255,0.06)', padding: '12px 15px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', backdropFilter: 'blur(10px)' }}>
                 <div style={{ width: '36px', height: '36px', borderRadius: '10px', backgroundColor: `${azulModerno}25`, color: azulModerno, display: 'flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
                   <MapPin size={16} />
                 </div>

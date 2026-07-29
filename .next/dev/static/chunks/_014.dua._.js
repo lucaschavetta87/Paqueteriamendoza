@@ -363,7 +363,7 @@ function Navbar({ setVista, azulModerno }) {
           .sidebar-menu { max-width: 310px !important; padding: 30px 20px !important; }
         }
 
-        /* --- ESTILOS DEL MENÚ DESPLEGABLE LATERAL --- */
+        /* --- ESTILOS DEL MENÚ DESPLEGABLE LATERAL CON FONDO MAPA --- */
         .sidebar-overlay {
           position: fixed;
           top: 0;
@@ -390,7 +390,11 @@ function Navbar({ setVista, azulModerno }) {
           width: 100%;
           max-width: 380px;
           height: 100vh;
-          background-color: rgba(10, 15, 26, 0.95);
+          /* REEMPLAZAMOS EL AZUL PLANO POR LA IMAGEN CON DEGRADADO OSCURO */
+          background-image: linear-gradient(rgba(8, 12, 22, 0.85), rgba(8, 12, 22, 0.95)), url('/fondo-mapa.jpeg');
+          background-position: center;
+          background-size: cover;
+          background-repeat: no-repeat;
           backdrop-filter: blur(25px);
           border-left: 1px solid rgba(255, 255, 255, 0.12);
           z-index: 160;
@@ -427,12 +431,12 @@ function Navbar({ setVista, azulModerno }) {
                             children: "ANDESBOX"
                         }, void 0, false, {
                             fileName: "[project]/components/Navbar.tsx",
-                            lineNumber: 140,
+                            lineNumber: 144,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/Navbar.tsx",
-                        lineNumber: 139,
+                        lineNumber: 143,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -443,24 +447,24 @@ function Navbar({ setVista, azulModerno }) {
                             size: 20
                         }, void 0, false, {
                             fileName: "[project]/components/Navbar.tsx",
-                            lineNumber: 149,
+                            lineNumber: 153,
                             columnNumber: 26
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$menu$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Menu$3e$__["Menu"], {
                             size: 20
                         }, void 0, false, {
                             fileName: "[project]/components/Navbar.tsx",
-                            lineNumber: 149,
+                            lineNumber: 153,
                             columnNumber: 44
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/Navbar.tsx",
-                        lineNumber: 144,
+                        lineNumber: 148,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/Navbar.tsx",
-                lineNumber: 137,
+                lineNumber: 141,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -468,7 +472,7 @@ function Navbar({ setVista, azulModerno }) {
                 onClick: toggleMenu
             }, void 0, false, {
                 fileName: "[project]/components/Navbar.tsx",
-                lineNumber: 154,
+                lineNumber: 158,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
@@ -497,12 +501,12 @@ function Navbar({ setVista, azulModerno }) {
                                             children: "ANDESBOX"
                                         }, void 0, false, {
                                             fileName: "[project]/components/Navbar.tsx",
-                                            lineNumber: 165,
+                                            lineNumber: 169,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/Navbar.tsx",
-                                        lineNumber: 164,
+                                        lineNumber: 168,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -518,18 +522,18 @@ function Navbar({ setVista, azulModerno }) {
                                             size: 18
                                         }, void 0, false, {
                                             fileName: "[project]/components/Navbar.tsx",
-                                            lineNumber: 171,
+                                            lineNumber: 175,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/Navbar.tsx",
-                                        lineNumber: 167,
+                                        lineNumber: 171,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/Navbar.tsx",
-                                lineNumber: 163,
+                                lineNumber: 167,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -554,7 +558,7 @@ function Navbar({ setVista, azulModerno }) {
                                                 color: azulModerno
                                             }, void 0, false, {
                                                 fileName: "[project]/components/Navbar.tsx",
-                                                lineNumber: 178,
+                                                lineNumber: 182,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -562,32 +566,32 @@ function Navbar({ setVista, azulModerno }) {
                                                 children: "Sobre Nosotros"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/Navbar.tsx",
-                                                lineNumber: 179,
+                                                lineNumber: 183,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/Navbar.tsx",
-                                        lineNumber: 177,
+                                        lineNumber: 181,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         style: {
                                             fontSize: '0.9rem',
-                                            color: 'rgba(255,255,255,0.75)',
+                                            color: 'rgba(255,255,255,0.85)',
                                             lineHeight: '1.6',
                                             margin: 0
                                         },
                                         children: "Somos tu nexo logístico en Mendoza para compras e importaciones internacionales. Nos encargamos del transporte aéreo y marítimo, la gestión aduanera y el seguimiento punto a punto para que tus paquetes lleguen seguros y a tiempo."
                                     }, void 0, false, {
                                         fileName: "[project]/components/Navbar.tsx",
-                                        lineNumber: 181,
+                                        lineNumber: 185,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/Navbar.tsx",
-                                lineNumber: 176,
+                                lineNumber: 180,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -609,7 +613,7 @@ function Navbar({ setVista, azulModerno }) {
                                                 color: azulModerno
                                             }, void 0, false, {
                                                 fileName: "[project]/components/Navbar.tsx",
-                                                lineNumber: 189,
+                                                lineNumber: 193,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -617,13 +621,13 @@ function Navbar({ setVista, azulModerno }) {
                                                 children: "Contactanos"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/Navbar.tsx",
-                                                lineNumber: 190,
+                                                lineNumber: 194,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/Navbar.tsx",
-                                        lineNumber: 188,
+                                        lineNumber: 192,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -643,10 +647,11 @@ function Navbar({ setVista, azulModerno }) {
                                                     gap: '12px',
                                                     textDecoration: 'none',
                                                     color: '#fff',
-                                                    backgroundColor: 'rgba(255,255,255,0.05)',
+                                                    backgroundColor: 'rgba(255,255,255,0.06)',
                                                     padding: '12px 15px',
                                                     borderRadius: '14px',
-                                                    border: '1px solid rgba(255,255,255,0.08)',
+                                                    border: '1px solid rgba(255,255,255,0.1)',
+                                                    backdropFilter: 'blur(10px)',
                                                     transition: 'all 0.3s'
                                                 },
                                                 children: [
@@ -665,12 +670,12 @@ function Navbar({ setVista, azulModerno }) {
                                                             size: 18
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/Navbar.tsx",
-                                                            lineNumber: 203,
+                                                            lineNumber: 207,
                                                             columnNumber: 19
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/Navbar.tsx",
-                                                        lineNumber: 202,
+                                                        lineNumber: 206,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -684,7 +689,7 @@ function Navbar({ setVista, azulModerno }) {
                                                                 children: "Atención al Cliente"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/Navbar.tsx",
-                                                                lineNumber: 206,
+                                                                lineNumber: 210,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -695,19 +700,19 @@ function Navbar({ setVista, azulModerno }) {
                                                                 children: "+54 9 261 685-2139"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/Navbar.tsx",
-                                                                lineNumber: 207,
+                                                                lineNumber: 211,
                                                                 columnNumber: 19
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/Navbar.tsx",
-                                                        lineNumber: 205,
+                                                        lineNumber: 209,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/Navbar.tsx",
-                                                lineNumber: 196,
+                                                lineNumber: 200,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -715,10 +720,11 @@ function Navbar({ setVista, azulModerno }) {
                                                     display: 'flex',
                                                     alignItems: 'flex-start',
                                                     gap: '12px',
-                                                    backgroundColor: 'rgba(255,255,255,0.05)',
+                                                    backgroundColor: 'rgba(255,255,255,0.06)',
                                                     padding: '12px 15px',
                                                     borderRadius: '14px',
-                                                    border: '1px solid rgba(255,255,255,0.08)'
+                                                    border: '1px solid rgba(255,255,255,0.1)',
+                                                    backdropFilter: 'blur(10px)'
                                                 },
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -737,12 +743,12 @@ function Navbar({ setVista, azulModerno }) {
                                                             size: 16
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/Navbar.tsx",
-                                                            lineNumber: 214,
+                                                            lineNumber: 218,
                                                             columnNumber: 19
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/Navbar.tsx",
-                                                        lineNumber: 213,
+                                                        lineNumber: 217,
                                                         columnNumber: 17
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -756,7 +762,7 @@ function Navbar({ setVista, azulModerno }) {
                                                                 children: "Oficina Central"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/Navbar.tsx",
-                                                                lineNumber: 217,
+                                                                lineNumber: 221,
                                                                 columnNumber: 19
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -768,37 +774,37 @@ function Navbar({ setVista, azulModerno }) {
                                                                 children: "Salta 1161, Ciudad, Mendoza"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/components/Navbar.tsx",
-                                                                lineNumber: 218,
+                                                                lineNumber: 222,
                                                                 columnNumber: 19
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/components/Navbar.tsx",
-                                                        lineNumber: 216,
+                                                        lineNumber: 220,
                                                         columnNumber: 17
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/Navbar.tsx",
-                                                lineNumber: 212,
+                                                lineNumber: 216,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/Navbar.tsx",
-                                        lineNumber: 193,
+                                        lineNumber: 197,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/Navbar.tsx",
-                                lineNumber: 187,
+                                lineNumber: 191,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/Navbar.tsx",
-                        lineNumber: 161,
+                        lineNumber: 165,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -816,18 +822,18 @@ function Navbar({ setVista, azulModerno }) {
                             children: "© 2026 AndesBox - Envíos Internacionales"
                         }, void 0, false, {
                             fileName: "[project]/components/Navbar.tsx",
-                            lineNumber: 228,
+                            lineNumber: 232,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/Navbar.tsx",
-                        lineNumber: 227,
+                        lineNumber: 231,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/Navbar.tsx",
-                lineNumber: 160,
+                lineNumber: 164,
                 columnNumber: 7
             }, this)
         ]
