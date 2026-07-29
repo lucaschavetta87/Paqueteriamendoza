@@ -124,7 +124,7 @@ function WhatsAppChat() {
                                     border: '2px solid #25D366'
                                 },
                                 className: "jsx-6bb75a40eee28242",
-                                children: "CC"
+                                children: "✈️"
                             }, void 0, false, {
                                 fileName: "[project]/components/WhatsAppChat.tsx",
                                 lineNumber: 34,
@@ -1879,7 +1879,7 @@ function WebAndesBox() {
     }, [
         notificacion
     ]);
-    // --- ENVIAR PREALERTA / CONSULTA POR WHATSAPP ---
+    // --- CONSULTA POR WHATSAPP ---
     const iniciarConsultaWhatsApp = ()=>{
         let mensaje = `Hola AndesBox! Quiero cotizar un envío:\n\n`;
         mensaje += `- *Tipo de producto:* ${tipoProducto.toUpperCase()}\n`;

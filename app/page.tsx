@@ -86,7 +86,7 @@ export default function WebAndesBox() {
     }
   }, [notificacion]);
 
-  // --- ENVIAR PREALERTA / CONSULTA POR WHATSAPP ---
+  // --- CONSULTA POR WHATSAPP ---
   const iniciarConsultaWhatsApp = () => {
     let mensaje = `Hola AndesBox! Quiero cotizar un envío:\n\n`;
     mensaje += `- *Tipo de producto:* ${tipoProducto.toUpperCase()}\n`;

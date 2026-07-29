@@ -31,7 +31,7 @@ export default function WhatsAppChat() {
       {isOpen && (
         <div style={{ position: 'absolute', bottom: '80px', right: '0', width: '320px', backgroundColor: colorFondoChat, borderRadius: '20px', boxShadow: '0 10px 40px rgba(0,0,0,0.8)', border: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden', animation: 'fadeInUp 0.3s ease' }}>
           <div style={{ backgroundColor: '#075e54', padding: '20px', textAlign: 'center' }}>
-            <div style={{ width: '55px', height: '55px', backgroundColor: '#fff', borderRadius: '50%', margin: '0 auto 12px', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '1.2rem', fontWeight: '900', color: '#075e54', border: '2px solid #25D366' }}>CC</div>
+            <div style={{ width: '55px', height: '55px', backgroundColor: '#fff', borderRadius: '50%', margin: '0 auto 12px', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '1.2rem', fontWeight: '900', color: '#075e54', border: '2px solid #25D366' }}>✈️</div>
             <div style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#fff' }}>ANDES BOX</div>
             <div style={{ fontSize: '0.85rem', color: '#e0e0e0', marginTop: '4px' }}>Logistica & Asesoramiento 🟢</div>
           </div>
