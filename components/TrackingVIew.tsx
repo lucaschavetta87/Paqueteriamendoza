@@ -168,7 +168,7 @@ export default function TrackingView({
       <section style={{ padding: '140px 5% 40px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{ fontSize: 'clamp(2.2rem, 8vw, 4.2rem)', fontWeight: '900', letterSpacing: '-1.5px', lineHeight: '1.15', maxWidth: '900px' }}>
           <h1 style={{ margin: 0, color: '#fff', fontSize: 'inherit', fontWeight: 'inherit' }}>
-            Cruzamos fronteras 
+            Cruzamos Fronteras 
           </h1>
           <span style={{ 
             color: azulModerno, 
@@ -296,7 +296,7 @@ export default function TrackingView({
           boxSizing: 'border-box'
         }}>
           <h2 style={{ fontSize: 'clamp(1.8rem, 5vw, 2.5rem)', fontWeight: '900', marginBottom: '8px', textAlign: 'center' }}>
-            Cotizá tu <span style={{ color: azulModerno }}>Envío</span>
+            Cotizá tu Envío
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', textAlign: 'center', marginBottom: '30px' }}>
             Configurá los datos de tu carga para recibir un presupuesto exacto.
@@ -496,7 +496,7 @@ export default function TrackingView({
 
         {/* ACORDEÓN DE PREGUNTAS FRECUENTES (FAQs) */}
         <div style={{ width: '100%', maxWidth: '750px', marginTop: '20px' }}>
-          <h2 style={{ fontSize: 'clamp(1.6rem, 5vw, 2.2rem)', fontWeight: '900', marginBottom: '25px', textAlign: 'center' }}>Preguntas <span style={{ color: azulModerno }}>Frecuentes</span></h2>
+          <h2 style={{ fontSize: 'clamp(1.6rem, 5vw, 2.2rem)', fontWeight: '900', marginBottom: '25px', textAlign: 'center' }}>Preguntas Frecuentes</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {listaFaqs.map((faq, idx) => {
               const isOpen = faqAbierta === idx;
