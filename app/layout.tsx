@@ -9,8 +9,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "ControlCel - Servicio Técnico",
-  description: "Reparación especializada de celulares y electrónica en Mendoza",
+  title: "Andes Box - Logística y Asesoramiento",
+  description: "Paquetería y asesoramiento logístico en Mendoza",
 };
 
 export default function RootLayout({
