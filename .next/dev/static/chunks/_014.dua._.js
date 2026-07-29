@@ -2388,7 +2388,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$WhatsAppChat$2
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2d$big$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/circle-check-big.mjs [app-client] (ecmascript) <export default as CheckCircle>");
 // Componentes modulares adaptados a AndesBox
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Navbar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/Navbar.tsx [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$TrackingVIew$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/TrackingVIew.tsx [app-client] (ecmascript)"); // Import corregido
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$TrackingVIew$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/TrackingVIew.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$CalculadoraView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/CalculadoraView.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$InfoSidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/InfoSidebar.tsx [app-client] (ecmascript)");
 ;
@@ -2418,13 +2418,31 @@ function WebAndesBox() {
     const [tipoProducto, setTipoProducto] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('general');
     const [mostrarResumen, setMostrarResumen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [notificacion, setNotificacion] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    // --- TRANSICIÓN DE FONDOS POR SCROLL ---
+    const [scrollY, setScrollY] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "WebAndesBox.useEffect": ()=>{
+            const handleScroll = {
+                "WebAndesBox.useEffect.handleScroll": ()=>{
+                    setScrollY(window.scrollY);
+                }
+            }["WebAndesBox.useEffect.handleScroll"];
+            window.addEventListener('scroll', handleScroll, {
+                passive: true
+            });
+            return ({
+                "WebAndesBox.useEffect": ()=>window.removeEventListener('scroll', handleScroll)
+            })["WebAndesBox.useEffect"];
+        }
+    }["WebAndesBox.useEffect"], []);
+    // Calculamos la opacidad progresiva del segundo fondo según la altura del scroll
+    const opacidadMapa = Math.min(1, Math.max(0, (scrollY - 200) / 500));
     // --- COTIZADOR EN TIEMPO REAL ---
     const costoEstimado = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
         "WebAndesBox.useMemo[costoEstimado]": ()=>{
-            // Tarifas de ejemplo por KG según categoría
-            const tarifaBasePorKg = 15; // USD por ejemplo
+            const tarifaBasePorKg = 15;
             let multiplicador = 1;
-            if (tipoProducto === 'tecnologia') multiplicador = 1.3; // Más recargo por aduana
+            if (tipoProducto === 'tecnologia') multiplicador = 1.3;
             if (tipoProducto === 'indumentaria') multiplicador = 1.1;
             return pesoEstimado * tarifaBasePorKg * multiplicador;
         }
@@ -2494,141 +2512,198 @@ function WebAndesBox() {
             boxShadow: esActivo ? `0 0 15px ${azulModerno}60` : 'none'
         };
     };
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        style: {
-            position: 'relative',
-            minHeight: '100vh',
-            backgroundColor: '#000',
-            color: '#fff',
-            fontFamily: 'sans-serif',
-            overflowX: 'hidden',
-            /* --- ESTILOS DEL FONDO FIJO (PARALLAX) --- */ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url('/fondo-logistica.jpeg')`,
-            backgroundAttachment: 'fixed',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'cover'
-        },
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                style: {
-                    position: 'relative',
-                    zIndex: 1
-                },
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Navbar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                        setVista: setVista,
-                        azulModerno: azulModerno
-                    }, void 0, false, {
-                        fileName: "[project]/app/page.tsx",
-                        lineNumber: 139,
-                        columnNumber: 9
-                    }, this),
-                    vista === 'inicio' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$TrackingVIew$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                        trackingBusqueda: trackingBusqueda,
-                        setTrackingBusqueda: setTrackingBusqueda,
-                        telBusqueda: telBusqueda,
-                        setTelBusqueda: setTelBusqueda,
-                        buscarTracking: buscarTracking,
-                        cargando: cargandoTracking,
-                        errorBusqueda: errorBusqueda,
-                        paquete: paquete,
-                        azulModerno: azulModerno
-                    }, void 0, false, {
-                        fileName: "[project]/app/page.tsx",
-                        lineNumber: 146,
-                        columnNumber: 11
-                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$CalculadoraView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                        pesoEstimado: pesoEstimado,
-                        setPesoEstimado: setPesoEstimado,
-                        tipoProducto: tipoProducto,
-                        setTipoProducto: setTipoProducto,
-                        costoEstimado: costoEstimado,
-                        iniciarConsultaWhatsApp: iniciarConsultaWhatsApp,
-                        azulModerno: azulModerno,
-                        estiloTab: estiloTab
-                    }, void 0, false, {
-                        fileName: "[project]/app/page.tsx",
-                        lineNumber: 158,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$WhatsAppChat$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
-                        fileName: "[project]/app/page.tsx",
-                        lineNumber: 170,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("footer", {
-                        style: {
-                            textAlign: 'center',
-                            padding: '40px 5%',
-                            opacity: 0.4,
-                            fontSize: '0.8rem'
-                        },
-                        children: "© 2026 AndesBox - Envíos Internacionales"
-                    }, void 0, false, {
-                        fileName: "[project]/app/page.tsx",
-                        lineNumber: 171,
-                        columnNumber: 9
-                    }, this)
-                ]
-            }, void 0, true, {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("style", {
+                children: `
+        .bg-fixed-layer {
+          position: fixed;
+          inset: 0;
+          width: 100%;
+          height: 100vh;
+          height: 100dvh; /* Soporte dinámico para barras de Safari y Chrome en celular */
+          z-index: 0;
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-size: cover;
+          pointer-events: none;
+          will-change: opacity;
+          transition: opacity 0.2s ease-out;
+        }
+
+        .bg-logistica {
+          background-image: linear-gradient(rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.70)), url('/fondo-logistica.jpeg');
+        }
+
+        .bg-mapa {
+          background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)), url('/fondo-mapa.jpeg');
+        }
+
+        /* AJUSTES EXCLUSIVOS PARA CELULARES */
+        @media (max-width: 768px) {
+          .bg-fixed-layer {
+            background-position: center top; /* Asegura que el centro/arriba de la imagen quede visible */
+            background-size: cover;
+          }
+        }
+      `
+            }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
                 lineNumber: 136,
                 columnNumber: 7
             }, this),
-            mostrarResumen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$InfoSidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                setMostrarResumen: setMostrarResumen,
-                azulModerno: azulModerno,
-                costoEstimado: costoEstimado,
-                iniciarConsultaWhatsApp: iniciarConsultaWhatsApp
-            }, void 0, false, {
-                fileName: "[project]/app/page.tsx",
-                lineNumber: 176,
-                columnNumber: 9
-            }, this),
-            notificacion && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 style: {
-                    position: 'fixed',
-                    top: '95px',
-                    right: '25px',
-                    backgroundColor: 'rgba(15, 23, 42, 0.85)',
-                    backdropFilter: 'blur(15px)',
-                    border: `1px solid ${azulModerno}`,
-                    borderRadius: '16px',
-                    padding: '12px 24px',
+                    position: 'relative',
+                    minHeight: '100vh',
+                    backgroundColor: '#000',
                     color: '#fff',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    zIndex: 5000,
-                    boxShadow: `0 10px 25px rgba(59, 130, 246, 0.25)`,
-                    fontWeight: '600',
-                    fontSize: '0.9rem'
+                    fontFamily: 'sans-serif',
+                    overflowX: 'hidden'
                 },
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2d$big$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle$3e$__["CheckCircle"], {
-                        color: "#10b981",
-                        size: 18
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "bg-fixed-layer bg-logistica",
+                        style: {
+                            opacity: 1 - opacidadMapa
+                        }
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 187,
+                        lineNumber: 180,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "bg-fixed-layer bg-mapa",
+                        style: {
+                            opacity: opacidadMapa
+                        }
+                    }, void 0, false, {
+                        fileName: "[project]/app/page.tsx",
+                        lineNumber: 188,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            position: 'relative',
+                            zIndex: 1
+                        },
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$Navbar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                setVista: setVista,
+                                azulModerno: azulModerno
+                            }, void 0, false, {
+                                fileName: "[project]/app/page.tsx",
+                                lineNumber: 198,
+                                columnNumber: 11
+                            }, this),
+                            vista === 'inicio' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$TrackingVIew$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                trackingBusqueda: trackingBusqueda,
+                                setTrackingBusqueda: setTrackingBusqueda,
+                                telBusqueda: telBusqueda,
+                                setTelBusqueda: setTelBusqueda,
+                                buscarTracking: buscarTracking,
+                                cargando: cargandoTracking,
+                                errorBusqueda: errorBusqueda,
+                                paquete: paquete,
+                                azulModerno: azulModerno
+                            }, void 0, false, {
+                                fileName: "[project]/app/page.tsx",
+                                lineNumber: 205,
+                                columnNumber: 13
+                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$CalculadoraView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                pesoEstimado: pesoEstimado,
+                                setPesoEstimado: setPesoEstimado,
+                                tipoProducto: tipoProducto,
+                                setTipoProducto: setTipoProducto,
+                                costoEstimado: costoEstimado,
+                                iniciarConsultaWhatsApp: iniciarConsultaWhatsApp,
+                                azulModerno: azulModerno,
+                                estiloTab: estiloTab
+                            }, void 0, false, {
+                                fileName: "[project]/app/page.tsx",
+                                lineNumber: 217,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$WhatsAppChat$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                                fileName: "[project]/app/page.tsx",
+                                lineNumber: 229,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("footer", {
+                                style: {
+                                    textAlign: 'center',
+                                    padding: '40px 5%',
+                                    opacity: 0.4,
+                                    fontSize: '0.8rem'
+                                },
+                                children: "© 2026 AndesBox - Envíos Internacionales"
+                            }, void 0, false, {
+                                fileName: "[project]/app/page.tsx",
+                                lineNumber: 230,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/app/page.tsx",
+                        lineNumber: 195,
+                        columnNumber: 9
+                    }, this),
+                    mostrarResumen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$InfoSidebar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                        setMostrarResumen: setMostrarResumen,
+                        azulModerno: azulModerno,
+                        costoEstimado: costoEstimado,
+                        iniciarConsultaWhatsApp: iniciarConsultaWhatsApp
+                    }, void 0, false, {
+                        fileName: "[project]/app/page.tsx",
+                        lineNumber: 235,
                         columnNumber: 11
                     }, this),
-                    " ",
-                    notificacion
+                    notificacion && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        style: {
+                            position: 'fixed',
+                            top: '95px',
+                            right: '25px',
+                            backgroundColor: 'rgba(15, 23, 42, 0.85)',
+                            backdropFilter: 'blur(15px)',
+                            border: `1px solid ${azulModerno}`,
+                            borderRadius: '16px',
+                            padding: '12px 24px',
+                            color: '#fff',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            zIndex: 5000,
+                            boxShadow: `0 10px 25px rgba(59, 130, 246, 0.25)`,
+                            fontWeight: '600',
+                            fontSize: '0.9rem'
+                        },
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2d$big$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle$3e$__["CheckCircle"], {
+                                color: "#10b981",
+                                size: 18
+                            }, void 0, false, {
+                                fileName: "[project]/app/page.tsx",
+                                lineNumber: 246,
+                                columnNumber: 13
+                            }, this),
+                            " ",
+                            notificacion
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/app/page.tsx",
+                        lineNumber: 245,
+                        columnNumber: 11
+                    }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 186,
-                columnNumber: 9
+                lineNumber: 169,
+                columnNumber: 7
             }, this)
         ]
-    }, void 0, true, {
-        fileName: "[project]/app/page.tsx",
-        lineNumber: 120,
-        columnNumber: 5
-    }, this);
+    }, void 0, true);
 }
-_s(WebAndesBox, "qe3HtV43uPDIO7MY320T8uAOfxc=");
+_s(WebAndesBox, "3UiK8IDZDaRoJo1mcjWrBCj/4m0=");
 _c = WebAndesBox;
 var _c;
 __turbopack_context__.k.register(_c, "WebAndesBox");

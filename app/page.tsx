@@ -7,7 +7,7 @@ import { CheckCircle } from 'lucide-react';
 
 // Componentes modulares adaptados a AndesBox
 import Navbar from '../components/Navbar';
-import TrackingView from '../components/TrackingVIew'; // Import corregido
+import TrackingView from '../components/TrackingVIew';
 import CalculadoraView from '../components/CalculadoraView'; 
 import InfoSidebar from '../components/InfoSidebar'; 
 
@@ -38,13 +38,27 @@ export default function WebAndesBox() {
   const [mostrarResumen, setMostrarResumen] = useState(false);
   const [notificacion, setNotificacion] = useState<string | null>(null);
 
+  // --- TRANSICIÓN DE FONDOS POR SCROLL ---
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Calculamos la opacidad progresiva del segundo fondo según la altura del scroll
+  const opacidadMapa = Math.min(1, Math.max(0, (scrollY - 200) / 500));
+
   // --- COTIZADOR EN TIEMPO REAL ---
   const costoEstimado = useMemo(() => {
-    // Tarifas de ejemplo por KG según categoría
-    const tarifaBasePorKg = 15; // USD por ejemplo
+    const tarifaBasePorKg = 15;
     let multiplicador = 1;
     
-    if (tipoProducto === 'tecnologia') multiplicador = 1.3; // Más recargo por aduana
+    if (tipoProducto === 'tecnologia') multiplicador = 1.3;
     if (tipoProducto === 'indumentaria') multiplicador = 1.1;
 
     return pesoEstimado * tarifaBasePorKg * multiplicador;
@@ -117,76 +131,122 @@ export default function WebAndesBox() {
   };
 
   return (
-    <div 
-      style={{ 
-        position: 'relative', 
-        minHeight: '100vh', 
-        backgroundColor: '#000', 
-        color: '#fff', 
-        fontFamily: 'sans-serif', 
-        overflowX: 'hidden',
-        /* --- ESTILOS DEL FONDO FIJO (PARALLAX) --- */
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)), url('/fondo-logistica.jpeg')`,
-        backgroundAttachment: 'fixed',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover'
-      }}
-    >
-      <div style={{ position: 'relative', zIndex: 1 }}>
-        
-        {/* Navbar adaptado para AndesBox */}
-        <Navbar 
-          setVista={setVista} 
-          azulModerno={azulModerno} 
+    <>
+      {/* ESTILOS CSS RESPONSIVOS PARA FONDOS EN MÓVILES */}
+      <style>{`
+        .bg-fixed-layer {
+          position: fixed;
+          inset: 0;
+          width: 100%;
+          height: 100vh;
+          height: 100dvh; /* Soporte dinámico para barras de Safari y Chrome en celular */
+          z-index: 0;
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-size: cover;
+          pointer-events: none;
+          will-change: opacity;
+          transition: opacity 0.2s ease-out;
+        }
+
+        .bg-logistica {
+          background-image: linear-gradient(rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.70)), url('/fondo-logistica.jpeg');
+        }
+
+        .bg-mapa {
+          background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)), url('/fondo-mapa.jpeg');
+        }
+
+        /* AJUSTES EXCLUSIVOS PARA CELULARES */
+        @media (max-width: 768px) {
+          .bg-fixed-layer {
+            background-position: center top; /* Asegura que el centro/arriba de la imagen quede visible */
+            background-size: cover;
+          }
+        }
+      `}</style>
+
+      <div 
+        style={{ 
+          position: 'relative', 
+          minHeight: '100vh', 
+          backgroundColor: '#000', 
+          color: '#fff', 
+          fontFamily: 'sans-serif', 
+          overflowX: 'hidden'
+        }}
+      >
+        {/* PRIMER FONDO RESPONSIVO (FONDO LOGÍSTICA) */}
+        <div 
+          className="bg-fixed-layer bg-logistica"
+          style={{
+            opacity: 1 - opacidadMapa,
+          }}
         />
 
-        {/* VISTAS DINÁMICAS */}
-        {vista === 'inicio' ? (
-          <TrackingView 
-            trackingBusqueda={trackingBusqueda} 
-            setTrackingBusqueda={setTrackingBusqueda} 
-            telBusqueda={telBusqueda} 
-            setTelBusqueda={setTelBusqueda} 
-            buscarTracking={buscarTracking} 
-            cargando={cargandoTracking} 
-            errorBusqueda={errorBusqueda} 
-            paquete={paquete} 
+        {/* SEGUNDO FONDO RESPONSIVO (FONDO MAPA) */}
+        <div 
+          className="bg-fixed-layer bg-mapa"
+          style={{
+            opacity: opacidadMapa,
+          }}
+        />
+
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          
+          {/* Navbar adaptado para AndesBox */}
+          <Navbar 
+            setVista={setVista} 
             azulModerno={azulModerno} 
           />
-        ) : (
-          <CalculadoraView 
-            pesoEstimado={pesoEstimado}
-            setPesoEstimado={setPesoEstimado}
-            tipoProducto={tipoProducto}
-            setTipoProducto={setTipoProducto}
+
+          {/* VISTAS DINÁMICAS */}
+          {vista === 'inicio' ? (
+            <TrackingView 
+              trackingBusqueda={trackingBusqueda} 
+              setTrackingBusqueda={setTrackingBusqueda} 
+              telBusqueda={telBusqueda} 
+              setTelBusqueda={setTelBusqueda} 
+              buscarTracking={buscarTracking} 
+              cargando={cargandoTracking} 
+              errorBusqueda={errorBusqueda} 
+              paquete={paquete} 
+              azulModerno={azulModerno} 
+            />
+          ) : (
+            <CalculadoraView 
+              pesoEstimado={pesoEstimado}
+              setPesoEstimado={setPesoEstimado}
+              tipoProducto={tipoProducto}
+              setTipoProducto={setTipoProducto}
+              costoEstimado={costoEstimado}
+              iniciarConsultaWhatsApp={iniciarConsultaWhatsApp}
+              azulModerno={azulModerno} 
+              estiloTab={estiloTab} 
+            />
+          )}
+
+          <WhatsAppChat />
+          <footer style={{ textAlign: 'center', padding: '40px 5%', opacity: 0.4, fontSize: '0.8rem' }}>© 2026 AndesBox - Envíos Internacionales</footer>
+        </div>
+
+        {/* SIDEBAR PARA PREALERTAS O REQUISITOS */}
+        {mostrarResumen && (
+          <InfoSidebar 
+            setMostrarResumen={setMostrarResumen} 
+            azulModerno={azulModerno} 
             costoEstimado={costoEstimado}
             iniciarConsultaWhatsApp={iniciarConsultaWhatsApp}
-            azulModerno={azulModerno} 
-            estiloTab={estiloTab} 
           />
         )}
 
-        <WhatsAppChat />
-        <footer style={{ textAlign: 'center', padding: '40px 5%', opacity: 0.4, fontSize: '0.8rem' }}>© 2026 AndesBox - Envíos Internacionales</footer>
+        {/* NOTIFICACIÓN FLOTANTE */}
+        {notificacion && (
+          <div style={{ position: 'fixed', top: '95px', right: '25px', backgroundColor: 'rgba(15, 23, 42, 0.85)', backdropFilter: 'blur(15px)', border: `1px solid ${azulModerno}`, borderRadius: '16px', padding: '12px 24px', color: '#fff', display: 'flex', alignItems: 'center', gap: '12px', zIndex: 5000, boxShadow: `0 10px 25px rgba(59, 130, 246, 0.25)`, fontWeight: '600', fontSize: '0.9rem' }}>
+            <CheckCircle color="#10b981" size={18} /> {notificacion}
+          </div>
+        )}
       </div>
-
-      {/* SIDEBAR PARA PREALERTAS O REQUISITOS */}
-      {mostrarResumen && (
-        <InfoSidebar 
-          setMostrarResumen={setMostrarResumen} 
-          azulModerno={azulModerno} 
-          costoEstimado={costoEstimado}
-          iniciarConsultaWhatsApp={iniciarConsultaWhatsApp}
-        />
-      )}
-
-      {/* NOTIFICACIÓN FLOTANTE */}
-      {notificacion && (
-        <div style={{ position: 'fixed', top: '95px', right: '25px', backgroundColor: 'rgba(15, 23, 42, 0.85)', backdropFilter: 'blur(15px)', border: `1px solid ${azulModerno}`, borderRadius: '16px', padding: '12px 24px', color: '#fff', display: 'flex', alignItems: 'center', gap: '12px', zIndex: 5000, boxShadow: `0 10px 25px rgba(59, 130, 246, 0.25)`, fontWeight: '600', fontSize: '0.9rem' }}>
-          <CheckCircle color="#10b981" size={18} /> {notificacion}
-        </div>
-      )}
-    </div>
+    </>
   );
 }
