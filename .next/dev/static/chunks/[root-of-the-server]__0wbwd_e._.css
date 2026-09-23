@@ -419,6 +419,10 @@
     position: relative;
   }
 
+  .sticky {
+    position: sticky;
+  }
+
   .start {
     inset-inline-start: var(--spacing);
   }
@@ -441,6 +445,14 @@
 
   .inline-flex {
     display: inline-flex;
+  }
+
+  .table {
+    display: table;
+  }
+
+  .border-collapse {
+    border-collapse: collapse;
   }
 
   .transform {
