@@ -4,9 +4,13 @@ import React, { useState } from 'react';
 import { logoutAction } from '../../app/admin/login/actions';
 import {
   PresupuestoEnvioData,
+  TarifaItem,
+  TipoEnvio,
   generarPDFAndesBox,
   construirMensajeWhatsApp,
   formatearNumeroPresupuesto,
+  formatearUSD,
+  formatearARS,
 } from './PresupuestoPDF';
 
 const azul = "#3b82f6";
@@ -16,6 +20,25 @@ interface Props {
 }
 
 const hoyInput = () => new Date().toISOString().slice(0, 10);
+
+const ETIQUETA_POR_TIPO: Record<TipoEnvio, string> = {
+  internacional: 'Logística + gestión aduanera',
+  nacional: 'Logística + gestión',
+  maritimo: 'Flete marítimo',
+};
+
+const EJEMPLO_MARITIMO = [
+  'Flete marítimo',
+  'Cargos en tránsito / puerto',
+  'Flete terrestre',
+  'Entrega en destino',
+];
+
+const CONCEPTOS_PRESET = [
+  ...Object.values(ETIQUETA_POR_TIPO),
+  ...EJEMPLO_MARITIMO,
+  '',
+];
 
 export default function PresupuestosEnvio({ vendedorInicial }: Props) {
   const [form, setForm] = useState({
@@ -28,12 +51,18 @@ export default function PresupuestosEnvio({ vendedorInicial }: Props) {
     descripcion: '',
     peso: '',
     cantidad: '1',
+    bultos_texto: '',
+    volumen: '',
     medidas: '',
     origen: '',
     destino: '',
-    tipo_envio: 'internacional',
+    tipo_envio: 'internacional' as TipoEnvio,
     categoria: '',
-    precio_usd: '',
+    items: [{ concepto: ETIQUETA_POR_TIPO.internacional, monto_usd: '' }] as {
+      concepto: string;
+      monto_usd: string;
+    }[],
+    profit: '',
     precio_ars: '',
     tarifa_kg: '8',
     tasa_ars: '1300',
@@ -47,22 +76,86 @@ export default function PresupuestosEnvio({ vendedorInicial }: Props) {
   const actualizar = (campo: string, valor: string) =>
     setForm((prev) => ({ ...prev, [campo]: valor }));
 
-  // --- Autocompletar precio USD según peso y tarifa por kg ---
+  // --- Tarifas: totales en vivo ---
+  const subtotalUSD = form.items.reduce((acc, i) => acc + (Number(i.monto_usd) || 0), 0);
+  const profitUSD = Number(form.profit) || 0;
+  const totalUSD = subtotalUSD + profitUSD;
+
+  const tasaARS = Number(form.tasa_ars) || 0;
+
+  // Actualiza tarifas/profit/tasa y recalcula el equivalente en pesos
+  const aplicarTarifas = (patch: Partial<typeof form>) =>
+    setForm((prev) => {
+      const items = patch.items ?? prev.items;
+      const profit = patch.profit ?? prev.profit;
+      const tasa = Number(patch.tasa_ars ?? prev.tasa_ars) || 0;
+      const subtotal = items.reduce((acc, i) => acc + (Number(i.monto_usd) || 0), 0);
+      const total = subtotal + (Number(profit) || 0);
+      const precio_ars = total && tasa ? String(Math.round(total * tasa)) : prev.precio_ars;
+      return { ...prev, ...patch, precio_ars };
+    });
+
+  // --- Ítems de tarifa ---
+  const agregarItem = () =>
+    aplicarTarifas({ items: [...form.items, { concepto: '', monto_usd: '' }] });
+
+  const modificarItem = (indice: number, campo: 'concepto' | 'monto_usd', valor: string) =>
+    aplicarTarifas({
+      items: form.items.map((item, i) => (i === indice ? { ...item, [campo]: valor } : item)),
+    });
+
+  const eliminarItem = (indice: number) =>
+    aplicarTarifas({ items: form.items.filter((_, i) => i !== indice) });
+
+  const cambiarTipo = (tipo: TipoEnvio) => {
+    if (tipo === form.tipo_envio) return;
+    const intacto =
+      form.items.length === 1 &&
+      !Number(form.items[0].monto_usd) &&
+      CONCEPTOS_PRESET.includes(form.items[0].concepto);
+    if (!intacto) {
+      setForm((prev) => ({ ...prev, tipo_envio: tipo }));
+      return;
+    }
+    const items =
+      tipo === 'maritimo'
+        ? EJEMPLO_MARITIMO.map((concepto) => ({ concepto, monto_usd: '' }))
+        : [{ concepto: ETIQUETA_POR_TIPO[tipo], monto_usd: '' }];
+    aplicarTarifas({ tipo_envio: tipo, items });
+  };
+
+  const cargarEjemploMaritimo = () =>
+    aplicarTarifas({
+      items: EJEMPLO_MARITIMO.map((concepto, i) => ({
+        concepto,
+        monto_usd: form.items[i]?.monto_usd || '',
+      })),
+    });
+
+  // --- Autocompletar un ítem según peso y tarifa por kg ---
   const sugerenciaUSD = () => {
     const peso = Number(form.peso) || 0;
     const tarifa = Number(form.tarifa_kg) || 0;
     return peso * tarifa;
   };
 
-  const aplicarSugerenciaUSD = () =>
-    setForm((prev) => ({ ...prev, precio_usd: String(sugerenciaUSD()) }));
+  const aplicarSugerenciaUSD = () => {
+    const sugerencia = sugerenciaUSD();
+    if (!sugerencia) return;
+    const valor = String(sugerencia);
+    const indice = form.items.findIndex((i) => !Number(i.monto_usd));
+    const items =
+      indice >= 0
+        ? form.items.map((item, i) =>
+            i === indice ? { ...item, concepto: item.concepto || 'Flete', monto_usd: valor } : item
+          )
+        : [...form.items, { concepto: 'Flete', monto_usd: valor }];
+    aplicarTarifas({ items });
+  };
 
   // --- Convertir USD a ARS ---
-  const convertirAARS = () => {
-    const usd = Number(form.precio_usd) || 0;
-    const tasa = Number(form.tasa_ars) || 0;
-    setForm((prev) => ({ ...prev, precio_ars: String(usd * tasa) }));
-  };
+  const convertirAARS = () =>
+    setForm((prev) => ({ ...prev, precio_ars: String(Math.round(totalUSD * tasaARS)) }));
 
   const notificar = (texto: string, ok = true) => {
     setMensaje(texto);
@@ -72,12 +165,20 @@ export default function PresupuestosEnvio({ vendedorInicial }: Props) {
 
   const construirPresupuesto = (): PresupuestoEnvioData | { error: string } | null => {
     const peso = Number(form.peso);
+    const items: TarifaItem[] = form.items
+      .filter((i) => i.concepto.trim() && Number(i.monto_usd))
+      .map((i) => ({ concepto: i.concepto.trim(), monto_usd: Number(i.monto_usd) }));
+
     if (!form.fecha) return { error: 'Falta la fecha del presupuesto.' };
     if (!form.cliente.trim()) return { error: 'Falta el nombre del cliente.' };
     if (!form.origen.trim()) return { error: 'Falta el origen (desde).' };
     if (!form.destino.trim()) return { error: 'Falta el destino (hacia).' };
     if (!peso || peso <= 0) return { error: 'El peso debe ser mayor a 0 kg.' };
-    if (!Number(form.precio_usd)) return { error: 'Falta el precio final de logística en USD.' };
+    if (!items.length) return { error: 'Agregá al menos un ítem de tarifa con importe mayor a 0.' };
+
+    const subtotal = items.reduce((acc, i) => acc + i.monto_usd, 0);
+    const profit = Number(form.profit) || 0;
+    const total = subtotal + profit;
 
     const id = Date.now();
     return {
@@ -92,13 +193,17 @@ export default function PresupuestosEnvio({ vendedorInicial }: Props) {
       descripcion: form.descripcion.trim(),
       peso_kg: peso,
       cantidad: Number(form.cantidad) || 1,
+      bultos_texto: form.bultos_texto.trim(),
+      volumen: form.volumen.trim(),
       medidas: form.medidas.trim(),
       origen: form.origen.trim(),
       destino: form.destino.trim(),
-      tipo_envio: form.tipo_envio as 'nacional' | 'internacional',
+      tipo_envio: form.tipo_envio,
       categoria: form.categoria,
-      precio_usd: Number(form.precio_usd),
-      precio_ars: Number(form.precio_ars) || 0,
+      items,
+      profit_usd: profit,
+      precio_usd: total,
+      precio_ars: Number(form.precio_ars) || Math.round(total * tasaARS),
       nota: form.nota.trim(),
     };
   };
@@ -164,6 +269,18 @@ export default function PresupuestosEnvio({ vendedorInicial }: Props) {
     transition: 'all 0.25s',
   });
 
+  const botonChico: React.CSSProperties = {
+    padding: '0 14px',
+    borderRadius: '12px',
+    border: `1px solid ${azul}`,
+    backgroundColor: `${azul}25`,
+    color: '#fff',
+    cursor: 'pointer',
+    fontWeight: 700,
+    fontSize: '0.75rem',
+    whiteSpace: 'nowrap',
+  };
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#000', color: '#fff', fontFamily: 'sans-serif' }}>
       {/* BARRA SUPERIOR */}
@@ -217,22 +334,27 @@ export default function PresupuestosEnvio({ vendedorInicial }: Props) {
             <input style={input} placeholder="Email" value={form.email} onChange={(e) => actualizar('email', e.target.value)} />
           </div>
 
-          <div style={{ fontSize: '0.9rem', fontWeight: 800, color: azul, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '12px' }}>2. Encomienda</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '18px' }}>
+          <div style={{ fontSize: '0.9rem', fontWeight: 800, color: azul, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '12px' }}>2. Encomienda / Embarque</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '14px' }}>
             <input style={input} placeholder="Contenido / Descripción" value={form.descripcion} onChange={(e) => actualizar('descripcion', e.target.value)} />
-            <input style={input} type="number" step="0.01" placeholder="Peso en kg *" value={form.peso} onChange={(e) => actualizar('peso', e.target.value)} />
-            <input style={input} type="number" placeholder="Cantidad de paquetes" value={form.cantidad} onChange={(e) => actualizar('cantidad', e.target.value)} />
+            <input style={input} type="number" step="0.01" placeholder="Peso bruto en kg *" value={form.peso} onChange={(e) => actualizar('peso', e.target.value)} />
+            <input style={input} type="number" placeholder="Cantidad de bultos / packages" value={form.cantidad} onChange={(e) => actualizar('cantidad', e.target.value)} />
+            <input style={input} placeholder='Bultos (texto) Ej: 34 cartons' value={form.bultos_texto} onChange={(e) => actualizar('bultos_texto', e.target.value)} />
+            <input style={input} placeholder='Volumen (VOL) Ej: 3 cbm' value={form.volumen} onChange={(e) => actualizar('volumen', e.target.value)} />
             <input style={input} placeholder="Medidas (alto x ancho x largo) cm" value={form.medidas} onChange={(e) => actualizar('medidas', e.target.value)} />
           </div>
 
           {/* TIPO DE ENVÍO */}
           <label style={label}>Tipo de Envío</label>
           <div style={{ display: 'flex', gap: '10px', marginBottom: '18px' }}>
-            <button type="button" style={botonTipo(form.tipo_envio === 'internacional')} onClick={() => actualizar('tipo_envio', 'internacional')}>
-              🌎 Envío Internacional
+            <button type="button" style={botonTipo(form.tipo_envio === 'internacional')} onClick={() => cambiarTipo('internacional')}>
+              🌎 Internacional
             </button>
-            <button type="button" style={botonTipo(form.tipo_envio === 'nacional')} onClick={() => actualizar('tipo_envio', 'nacional')}>
-              🇦🇷 Envío Nacional
+            <button type="button" style={botonTipo(form.tipo_envio === 'nacional')} onClick={() => cambiarTipo('nacional')}>
+              🇦🇷 Nacional
+            </button>
+            <button type="button" style={botonTipo(form.tipo_envio === 'maritimo')} onClick={() => cambiarTipo('maritimo')}>
+              🚢 Marítimo
             </button>
           </div>
 
@@ -240,11 +362,11 @@ export default function PresupuestosEnvio({ vendedorInicial }: Props) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginBottom: '18px' }}>
             <div>
               <label style={label}>Origen (desde) *</label>
-              <input style={input} placeholder="Ej: Miami, USA / Mendoza" value={form.origen} onChange={(e) => actualizar('origen', e.target.value)} />
+              <input style={input} placeholder="Ej: Qingdao, China / Miami, USA" value={form.origen} onChange={(e) => actualizar('origen', e.target.value)} />
             </div>
             <div>
               <label style={label}>Destino (hacia) *</label>
-              <input style={input} placeholder="Ej: Mendoza, Argentina / Luján de Cuyo" value={form.destino} onChange={(e) => actualizar('destino', e.target.value)} />
+              <input style={input} placeholder="Ej: Mendoza vía Chile" value={form.destino} onChange={(e) => actualizar('destino', e.target.value)} />
             </div>
             <div>
               <label style={label}>Categoría</label>
@@ -260,16 +382,58 @@ export default function PresupuestosEnvio({ vendedorInicial }: Props) {
             </div>
           </div>
 
-          <div style={{ fontSize: '0.9rem', fontWeight: 800, color: azul, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '12px' }}>3. Precio Final de Logística</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '14px' }}>
-            <div>
-              <label style={label}>Precio en USD *</label>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <input style={input} type="number" step="0.01" placeholder="0.00" value={form.precio_usd} onChange={(e) => actualizar('precio_usd', e.target.value)} />
-                <button type="button" onClick={aplicarSugerenciaUSD} title="Calcular según peso y tarifa" style={{ flexShrink: 0, padding: '0 14px', borderRadius: '12px', border: `1px solid ${azul}`, backgroundColor: `${azul}25`, color: '#fff', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem' }}>
-                  AUTO
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '12px' }}>
+            <div style={{ fontSize: '0.9rem', fontWeight: 800, color: azul, letterSpacing: '1px', textTransform: 'uppercase' }}>3. Tarifas y Costos de Logística</div>
+            {form.tipo_envio === 'maritimo' && (
+              <button type="button" onClick={cargarEjemploMaritimo} style={{ ...botonChico, padding: '7px 14px' }}>
+                Cargar desglose marítimo
+              </button>
+            )}
+          </div>
+
+          {/* ÍTEMS DE TARIFA */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
+            {form.items.map((item, indice) => (
+              <div key={indice} style={{ display: 'grid', gridTemplateColumns: '1fr 170px 42px', gap: '8px', alignItems: 'center' }}>
+                <input
+                  style={input}
+                  placeholder="Concepto (Ej: Flete marítimo)"
+                  value={item.concepto}
+                  onChange={(e) => modificarItem(indice, 'concepto', e.target.value)}
+                />
+                <input
+                  style={input}
+                  type="number"
+                  step="0.01"
+                  placeholder="USD 0,00"
+                  value={item.monto_usd}
+                  onChange={(e) => modificarItem(indice, 'monto_usd', e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => eliminarItem(indice)}
+                  title="Eliminar concepto"
+                  style={{ height: '46px', borderRadius: '12px', border: '1px solid rgba(239,68,68,0.5)', backgroundColor: 'rgba(239,68,68,0.12)', color: '#ff6b6b', cursor: 'pointer', fontWeight: 800, fontSize: '1rem' }}
+                >
+                  ✕
                 </button>
               </div>
+            ))}
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              <button type="button" onClick={agregarItem} style={{ ...botonChico, padding: '10px 16px' }}>
+                + Agregar concepto
+              </button>
+              <button type="button" onClick={aplicarSugerenciaUSD} title="Calcular según peso y tarifa por kg" style={{ ...botonChico, padding: '10px 16px' }}>
+                AUTO (peso × tarifa)
+              </button>
+            </div>
+          </div>
+
+          {/* PROFIT + TOTALES */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '14px' }}>
+            <div>
+              <label style={label}>Mi profit / Gestión (USD)</label>
+              <input style={input} type="number" step="0.01" placeholder="0.00" value={form.profit} onChange={(e) => aplicarTarifas({ profit: e.target.value })} />
             </div>
             <div>
               <label style={label}>Tarifa USD / kg (referencia)</label>
@@ -279,14 +443,30 @@ export default function PresupuestosEnvio({ vendedorInicial }: Props) {
               <label style={label}>Equivalente en ARS</label>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <input style={input} type="number" step="1" placeholder="0" value={form.precio_ars} onChange={(e) => actualizar('precio_ars', e.target.value)} />
-                <button type="button" onClick={convertirAARS} title="Convertir USD a ARS" style={{ flexShrink: 0, padding: '0 14px', borderRadius: '12px', border: `1px solid ${azul}`, backgroundColor: `${azul}25`, color: '#fff', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem' }}>
+                <button type="button" onClick={convertirAARS} title="Convertir USD a ARS" style={{ ...botonChico, flexShrink: 0 }}>
                   USD→ARS
                 </button>
               </div>
             </div>
             <div>
               <label style={label}>Tipo de cambio</label>
-              <input style={input} type="number" step="1" placeholder="1300" value={form.tasa_ars} onChange={(e) => actualizar('tasa_ars', e.target.value)} />
+              <input style={input} type="number" step="1" placeholder="1300" value={form.tasa_ars} onChange={(e) => aplicarTarifas({ tasa_ars: e.target.value })} />
+            </div>
+          </div>
+
+          {/* RESUMEN EN VIVO */}
+          <div style={{ border: '1px solid rgba(255,255,255,0.15)', borderRadius: '14px', overflow: 'hidden', marginBottom: '18px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.04)', fontSize: '0.85rem', fontWeight: 700 }}>
+              <span>Subtotal Tarifas Logísticas</span>
+              <span>{formatearUSD(subtotalUSD)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', backgroundColor: 'rgba(255,255,255,0.04)', fontSize: '0.85rem', fontWeight: 700, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+              <span>Mi profit / Gestión</span>
+              <span>{formatearUSD(profitUSD)}</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '13px 14px', backgroundColor: `${azul}25`, borderTop: '1px solid rgba(255,255,255,0.1)', fontSize: '1rem', fontWeight: 900 }}>
+              <span>COSTO TOTAL ESTIMADO</span>
+              <span>{formatearUSD(totalUSD)} {Number(form.precio_ars) ? `/ ${formatearARS(Number(form.precio_ars))}` : ''}</span>
             </div>
           </div>
 

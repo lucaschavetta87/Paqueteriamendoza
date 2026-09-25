@@ -8,6 +8,13 @@ export const DATOS_ANDESBOX = {
   web: 'www.andesbox.com.ar',
 };
 
+export type TipoEnvio = 'nacional' | 'internacional' | 'maritimo';
+
+export interface TarifaItem {
+  concepto: string;
+  monto_usd: number;
+}
+
 export interface PresupuestoEnvioData {
   id: number;
   numero: string;
@@ -20,11 +27,15 @@ export interface PresupuestoEnvioData {
   descripcion: string;
   peso_kg: number;
   cantidad: number;
+  bultos_texto: string;
+  volumen: string;
   medidas: string;
   origen: string;
   destino: string;
-  tipo_envio: string; // 'nacional' | 'internacional'
+  tipo_envio: TipoEnvio;
   categoria: string;
+  items: TarifaItem[];
+  profit_usd: number;
   precio_usd: number;
   precio_ars: number;
   nota: string;
@@ -62,28 +73,70 @@ export function formatearARS(valor: number): string {
   return '$ ' + Number(valor || 0).toLocaleString('es-AR', { maximumFractionDigits: 0 });
 }
 
+export function etiquetaServicio(tipo: TipoEnvio): string {
+  if (tipo === 'maritimo') return 'ENVÍO INTERNACIONAL MARÍTIMO + TERRESTRE';
+  if (tipo === 'nacional') return 'ENVÍO NACIONAL';
+  return 'ENVÍO INTERNACIONAL';
+}
+
+export function etiquetaCorta(tipo: TipoEnvio): string {
+  if (tipo === 'maritimo') return 'ENVÍO MARÍTIMO';
+  if (tipo === 'nacional') return 'ENVÍO NACIONAL';
+  return 'ENVÍO INTERNACIONAL';
+}
+
+export function subtotalItems(items: TarifaItem[]): number {
+  return (items || []).reduce((acc, i) => acc + (Number(i.monto_usd) || 0), 0);
+}
+
+export function totalPresupuesto(items: TarifaItem[], profit: number): number {
+  return subtotalItems(items) + (Number(profit) || 0);
+}
+
+function textoBultos(d: PresupuestoEnvioData): string {
+  if (d.bultos_texto?.trim()) return d.bultos_texto.trim();
+  const cantidad = Number(d.cantidad || 1);
+  return `${cantidad} ${cantidad === 1 ? 'bulto' : 'bultos'}`;
+}
+
 // Genera el PDF A4 profesional y abre el diálogo de impresión
 export function generarPDFAndesBox(d: PresupuestoEnvioData) {
   const ventana = window.open('', '_blank', 'width=900,height=1100');
   if (!ventana) return;
 
-  const tipo = d.tipo_envio === 'nacional' ? 'ENVÍO NACIONAL' : 'ENVÍO INTERNACIONAL';
+  const servicio = etiquetaServicio(d.tipo_envio);
 
   const detalleFilas: { label: string; valor: string }[] = [
-    { label: 'CONTENIDO DE LA ENCOMIENDA', valor: d.descripcion },
-    { label: 'PESO TOTAL', valor: `${Number(d.peso_kg || 0).toLocaleString('es-AR')} Kg` },
-    { label: 'CANTIDAD DE PAQUETES', valor: String(d.cantidad || 1) },
-  ];
-  if (d.medidas) detalleFilas.push({ label: 'MEDIDAS (ALTO x ANCHO x LARGO)', valor: d.medidas });
-  detalleFilas.push(
-    { label: 'SERVICIO', valor: tipo },
     { label: 'ORIGEN (DESDE)', valor: d.origen },
-    { label: 'DESTINO (HACIA)', valor: d.destino }
+    { label: 'DESTINO (HACIA)', valor: d.destino },
+    {
+      label: 'CANTIDAD DE BULTOS / PACKAGES (PCS)',
+      valor: textoBultos(d),
+    },
+  ];
+  if (d.volumen) detalleFilas.push({ label: 'VOLUMEN (VOL)', valor: d.volumen });
+  detalleFilas.push(
+    { label: 'PESO BRUTO (G.W.)', valor: `${Number(d.peso_kg || 0).toLocaleString('es-AR')} kg` },
+    { label: 'SERVICIO', valor: servicio }
   );
+  if (d.descripcion) detalleFilas.push({ label: 'CONTENIDO DE LA ENCOMIENDA', valor: d.descripcion });
+  if (d.medidas) detalleFilas.push({ label: 'MEDIDAS (ALTO x ANCHO x LARGO)', valor: d.medidas });
   if (d.categoria) detalleFilas.push({ label: 'CATEGORÍA', valor: d.categoria });
 
   const filasTabla = detalleFilas
     .map((f) => `<tr><td class="lbl">${escapeHtml(f.label)}</td><td class="val">${escapeHtml(f.valor).toUpperCase()}</td></tr>`)
+    .join('');
+
+  const subtotal = subtotalItems(d.items);
+  const profit = Number(d.profit_usd) || 0;
+  const total = subtotal + profit > 0 ? subtotal + profit : Number(d.precio_usd) || 0;
+
+  const filasTarifas = (d.items || [])
+    .filter((i) => i.concepto.trim() && Number(i.monto_usd) !== 0)
+    .map(
+      (i) =>
+        `<tr class="tarifa"><td class="tarifa-lbl">${escapeHtml(i.concepto.trim())}</td><td class="tarifa-val">${formatearUSD(Number(i.monto_usd))}</td></tr>`
+    )
     .join('');
 
   const html = `
@@ -115,22 +168,23 @@ export function generarPDFAndesBox(d: PresupuestoEnvioData) {
       .tabla { width: 100%; border-collapse: collapse; }
       .tabla th { background: #0f172a; color: #fff; padding: 9px 12px; text-align: left; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
       .tabla td { border: 1px solid #cbd5e1; padding: 8px 12px; vertical-align: top; font-size: 12.5px; }
-      .tabla .lbl { font-size: 9px; color: #64748b; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; }
+      .tabla .lbl { font-size: 9px; color: #64748b; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; width: 42%; }
       .tabla .val { font-weight: 700; color: #0f172a; text-transform: uppercase; }
-      .totales { margin-top: 14px; border: 2px solid #0f172a; }
-      .totales .fila { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
-      .totales .fila.total { background: #0f172a; color: #fff; font-size: 16px; font-weight: 900; }
-      .totales .fila.total .monto { color: #fff; }
-      .totales .lbl { font-weight: 700; font-size: 12px; }
-      .totales .monto { font-weight: 900; font-size: 13px; text-align: right; }
-      .totales .ars-row { background: #f1f5f9; }
-      .totales .ars-row .monto { color: #0f172a; }
+      .tarifas { width: 100%; border-collapse: collapse; }
+      .tarifas td { border: 1px solid #cbd5e1; padding: 8px 12px; font-size: 12.5px; }
+      .tarifas .tarifa-lbl { color: #111; }
+      .tarifas .tarifa-val { text-align: right; font-weight: 700; color: #0f172a; white-space: nowrap; width: 34%; }
+      .tarifas .subtotal td { background: #f8fafc; font-weight: 700; }
+      .tarifas .profit td { background: #f8fafc; }
+      .tarifas .total td { background: #0f172a; color: #fff; font-weight: 900; font-size: 14px; border-color: #0f172a; }
+      .tarifas .total .tarifa-val { color: #fff; }
+      .totales { margin-top: 12px; border: 2px solid #0f172a; }
+      .totales .fila { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; background: #f1f5f9; }
+      .totales .lbl { font-weight: 700; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #334155; }
+      .totales .monto { font-weight: 900; font-size: 13px; text-align: right; color: #0f172a; }
       .nota { margin-top: 12px; border: 1px solid #94a3b8; padding: 10px 12px; font-size: 11.5px; white-space: pre-line; }
       .nota b { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: #475569; }
-      .firma { margin-top: 26px; display: flex; justify-content: space-between; align-items: flex-end; }
-      .firma .sig { text-align: center; font-size: 11px; color: #334155; }
-      .firma .sig .linea { border-top: 1px solid #111; width: 170px; margin-bottom: 5px; }
-      .footer { margin-top: 18px; border-top: 1px solid #94a3b8; padding-top: 8px; text-align: center; font-size: 10px; color: #475569; }
+      .footer { margin-top: 22px; border-top: 1px solid #94a3b8; padding-top: 8px; text-align: center; font-size: 10px; color: #475569; }
       .footer b { color: #0f172a; }
       .badge { display: inline-block; background: #3b82f6; color: #fff; font-weight: 800; font-size: 10.5px; letter-spacing: 1px; padding: 3px 10px; border-radius: 20px; }
     </style>
@@ -152,8 +206,8 @@ export function generarPDFAndesBox(d: PresupuestoEnvioData) {
     <div class="titulo-banda">
       <h1>PRESUPUESTO DE ENVÍO</h1>
       <div class="refs">
-        <div><b>Nº:</b> ${escapeHtml(d.numero)}&nbsp;&nbsp;|&nbsp;&nbsp;<b>Fecha:</b> ${escapeHtml(formatearFecha(d.fecha))}</div>
-        <div><b>Vendedor:</b> ${escapeHtml(d.vendedor).toUpperCase()} <span class="badge">${tipo}</span></div>
+        <div><b>N°:</b> ${escapeHtml(d.numero)}&nbsp;&nbsp;|&nbsp;&nbsp;<b>Fecha:</b> ${escapeHtml(formatearFecha(d.fecha))}</div>
+        <div><b>Vendedor:</b> ${escapeHtml(d.vendedor).toUpperCase()} <span class="badge">${escapeHtml(etiquetaCorta(d.tipo_envio))}</span></div>
       </div>
     </div>
 
@@ -168,11 +222,8 @@ export function generarPDFAndesBox(d: PresupuestoEnvioData) {
     </div>
 
     <div class="sec">
-      <div class="sec-title">Detalle de la Encomienda</div>
+      <div class="sec-title">Detalle de la Encomienda / Embarque</div>
       <table class="tabla">
-        <thead>
-          <tr><th style="width:40%;">Campo</th><th>Información</th></tr>
-        </thead>
         <tbody>
           ${filasTabla}
         </tbody>
@@ -180,11 +231,20 @@ export function generarPDFAndesBox(d: PresupuestoEnvioData) {
     </div>
 
     <div class="sec">
-      <div class="sec-title">Costos de Logística</div>
+      <div class="sec-title">Tarifas y Costos de Logística</div>
+      <table class="tarifas">
+        <tbody>
+          ${filasTarifas}
+          <tr class="subtotal"><td>Subtotal Tarifas Logísticas</td><td class="tarifa-val">${formatearUSD(subtotal)}</td></tr>
+          <tr class="profit"><td>Mi profit / Gestión</td><td class="tarifa-val">${formatearUSD(profit)}</td></tr>
+          <tr class="total"><td>COSTO TOTAL ESTIMADO</td><td class="tarifa-val">${formatearUSD(total)}</td></tr>
+        </tbody>
+      </table>
       <div class="totales">
-        <div class="fila"><span class="lbl">LOGÍSTICA + GESTIÓN ADUANERA (${escapeHtml(tipo)})</span><span class="monto">${formatearUSD(Number(d.precio_usd))}</span></div>
-        <div class="fila ars-row"><span class="lbl">EQUIVALENTE EN PESOS ARGENTINOS</span><span class="monto">${formatearARS(Number(d.precio_ars))}</span></div>
-        <div class="fila total"><span>TOTAL DE LOGÍSTICA</span><span class="monto">${formatearUSD(Number(d.precio_usd))} / ${formatearARS(Number(d.precio_ars))}</span></div>
+        <div class="fila">
+          <span class="lbl">Equivalente en pesos argentinos</span>
+          <span class="monto">${formatearARS(Number(d.precio_ars))}</span>
+        </div>
       </div>
     </div>
 
@@ -192,20 +252,9 @@ export function generarPDFAndesBox(d: PresupuestoEnvioData) {
     <div class="nota"><b>Observaciones:</b><br/>${escapeHtml(d.nota).toUpperCase()}</div>
     ` : ''}
 
-    <div class="firma">
-      <div class="sig">
-        <div class="linea"></div>
-        ${escapeHtml(d.vendedor).toUpperCase()}<br />Vendedor / AndesBox
-      </div>
-      <div class="sig">
-        <div class="linea"></div>
-        ${escapeHtml(d.cliente).toUpperCase()}<br />Conforme Cliente
-      </div>
-    </div>
-
     <div class="footer">
       <b>ESTE PRESUPUESTO TIENE UNA VALIDEZ DE 10 DÍAS CORRIDOS.</b><br />
-      Cotización sujeta a cambios de tarifas aduaneras y tipos de cambio. ${escapeHtml(DATOS_ANDESBOX.web)} - AndesBox
+      Cotización sujeta a cambios de tarifas aduaneras, marítimas y tipos de cambio. ${escapeHtml(DATOS_ANDESBOX.web)} - AndesBox
     </div>
 
     <script>window.onload = function () { setTimeout(function () { window.print(); }, 150); };</script>
@@ -220,17 +269,40 @@ export function generarPDFAndesBox(d: PresupuestoEnvioData) {
 
 // Mensaje de WhatsApp para enviar la cotización
 export function construirMensajeWhatsApp(d: PresupuestoEnvioData): string {
-  const tipo = d.tipo_envio === 'nacional' ? 'ENVÍO NACIONAL' : 'ENVÍO INTERNACIONAL';
+  const servicio = etiquetaServicio(d.tipo_envio);
+  const subtotal = subtotalItems(d.items);
+  const profit = Number(d.profit_usd) || 0;
+  const total = subtotal + profit > 0 ? subtotal + profit : Number(d.precio_usd) || 0;
+
+  const detalleItems = (d.items || [])
+    .filter((i) => i.concepto.trim() && Number(i.monto_usd) !== 0)
+    .map((i) => `• ${i.concepto.trim()}: ${formatearUSD(Number(i.monto_usd))}`)
+    .join('\n');
+
+  const bultos =
+    d.bultos_texto?.trim() || (Number(d.cantidad) > 1 ? textoBultos(d) : '');
+  const lineasExtras = [
+    bultos ? `📦 *Bultos:* ${bultos}` : '',
+    d.volumen ? `📐 *Volumen:* ${d.volumen}` : '',
+  ]
+    .filter(Boolean)
+    .join('\n');
+
   return (
     `*PRESUPUESTO N° ${d.numero} - ANDESBOX*\n\n` +
     `📅 *Fecha:* ${formatearFecha(d.fecha)}\n` +
     `👤 *Cliente:* ${d.cliente.toUpperCase()}\n\n` +
-    `📦 *Contenido:* ${d.descripcion}\n` +
+    `📦 *Contenido:* ${d.descripcion || '—'}\n` +
     `⚖️ *Peso:* ${d.peso_kg} Kg\n` +
-    `🧭 *Tipo:* ${tipo}\n` +
+    (lineasExtras ? `${lineasExtras}\n` : '') +
+    `🧭 *Servicio:* ${servicio}\n` +
     `📍 *Origen:* ${d.origen}\n` +
     `🎯 *Destino:* ${d.destino}\n\n` +
-    `💰 *Total logística:* ${formatearUSD(Number(d.precio_usd))} (${formatearARS(Number(d.precio_ars))})\n\n` +
+    `*TARIFAS Y COSTOS*\n` +
+    (detalleItems ? `${detalleItems}\n` : '') +
+    `Subtotal: ${formatearUSD(subtotal)}\n` +
+    `Profit / Gestión: ${formatearUSD(profit)}\n` +
+    `💰 *Costo total:* ${formatearUSD(total)} (${formatearARS(Number(d.precio_ars))})\n\n` +
     `Validez: 10 días corridos.\nANDESBOX - Envíos y Logística`
   );
 }
